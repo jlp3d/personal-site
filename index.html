@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jonathan Pedrero</title>
+
+  <!-- Meta -->
+  <meta name="description" content="Portfolio of Jonathan Pedrero — IT Operations Professional. Experience, projects, skills, and contact links." />
+  <meta property="og:title" content="Jonathan Pedrero — IT Operations" />
+  <meta property="og:description" content="Tech-themed portfolio: experience, projects, and tools. Built with HTML, CSS, JS, and GitHub Pages." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og.png" />
+  <link rel="icon" href="assets/favicon.png" />
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+
+  <style>
+    html{scroll-behavior:smooth;}
+    :root{
+      --bg:#0b0f14; --panel:#0f1520; --text:#e6f0ff; --muted:#96a7c2;
+      --brand:#3aa0ff; --brand-2:#6ee0ff; --border:#1f2a3a;
+      --glow:0 0 24px rgba(58,160,255,.35); --radius:16px; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --fab-bg:#17324d; --header-bg:linear-gradient(180deg,#06101a,#0a1420);
+      --footer-bg:linear-gradient(0deg,#06101a,#0a1420);
+      --ease:cubic-bezier(.2,.6,.2,1);
+      --theme-ms:480ms;
+    }
+    html:not(.dark){
+      --bg:#cfd8e3; --panel:#e4ebf4; --text:#0c1522; --muted:#334e68;
+      --brand:#1f5fd1; --brand-2:#5b9af5; --border:#b1c1d6;
+      --shadow:0 10px 24px rgba(0,0,0,.08);
+      --fab-bg:#0c1522; --header-bg:linear-gradient(180deg,#bccbe0,#b2c3da);
+      --footer-bg:linear-gradient(0deg,#bccbe0,#b2c3da);
+    }
+    @media (prefers-reduced-motion: no-preference){
+      html.theme-x *{
+        transition:
+          color var(--theme-ms) var(--ease),
+          background var(--theme-ms) var(--ease),
+          background-color var(--theme-ms) var(--ease),
+          border-color var(--theme-ms) var(--ease),
+          box-shadow var(--theme-ms) var(--ease),
+          fill var(--theme-ms) var(--ease),
+          stroke var(--theme-ms) var(--ease) !important;
+      }
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      line-height:1.6;background:var(--bg);color:var(--text);position:relative;
+      transition: background-color .25s var(--ease), color .25s var(--ease);
+    }
+
+    .container{width:min(1100px,92%);margin-inline:auto}
+
+    /* Page-entry fade-ins */
+    .page-enter{opacity:0;transform:translateY(10px)}
+    body.page-in .page-enter{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
+    .delay-0{transition-delay:0s}
+    .delay-1{transition-delay:.08s}
+    .delay-2{transition-delay:.16s}
+    .delay-3{transition-delay:.24s}
+    .delay-4{transition-delay:.32s}
+    .delay-5{transition-delay:.40s}
+
+    /* Background aurora + noise */
+    body::before{content:"";position:fixed;inset:0;z-index:-2;background:
+      radial-gradient(40% 60% at 15% 10%, rgba(58,160,255,.14), transparent 60%),
+      radial-gradient(35% 55% at 85% 15%, rgba(110,224,255,.12), transparent 60%),
+      radial-gradient(45% 65% at 50% 100%, rgba(40,80,160,.2), transparent 60%);
+      animation:aurora 18s ease-in-out infinite alternate}
+    html:not(.dark) body::before{background:
+      radial-gradient(40% 60% at 15% 10%, rgba(96,165,250,.32), transparent 60%),
+      radial-gradient(35% 55% at 85% 15%, rgba(125,211,252,.28), transparent 60%),
+      radial-gradient(45% 65% at 50% 100%, rgba(120,140,165,.34), transparent 60%)}
+    @keyframes aurora{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-2%) scale(1.02)}}
+    .noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.5"/></svg>');mix-blend-mode:overlay}
+
+    /* Scroll progress */
+    .progress{position:fixed;top:0;left:0;height:3px;width:100%;background:transparent;z-index:70}
+    .progress::after{content:"";display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--brand),var(--brand-2));transform-origin:left;transform:scaleX(0);transition:transform .1s linear}
+
+    /* Header / nav */
+    .site-header{position:sticky;top:0;z-index:60;background:var(--header-bg);border-bottom:1px solid var(--border);backdrop-filter:blur(10px) saturate(1.2);transition: background .25s var(--ease), border-color .25s var(--ease)}
+    .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.7rem 0}
+    .brand{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--text)}
+    .brand-avatar{width:40px;height:40px;object-fit:cover;border-radius:50%;border:1px solid var(--border);box-shadow:var(--shadow)}
+    .brand-text{font-family:"Fira Code",monospace;font-weight:800;letter-spacing:.5px;color:var(--text);opacity:.85}
+    .nav{position:relative;display:flex;gap:.5rem}
+    .nav-link{position:relative;color:var(--muted);text-decoration:none;padding:.45rem .65rem;border-radius:10px;transition:transform .2s,color .2s,background .2s}
+    .nav-link:hover{color:var(--text);background:rgba(58,160,255,.12);transform:translateY(-1px)}
+    .nav-underline{position:absolute;bottom:2px;left:0;height:2px;width:0;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2));transition:transform .25s,width .25s,left .25s}
+    html:not(.dark) .nav-link{color:#4e6a87}
+    .hamburger{display:none;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .2s, opacity .2s}
+    .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .hamburger.open span:nth-child(2){opacity:0}
+    .hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+    .mobile-drawer{position:fixed;inset:56px 0 auto 0;background:var(--panel);border-bottom:1px solid var(--border);transform:translateY(-120%);transition:transform .25s ease;display:flex;flex-direction:column;padding:.5rem;gap:.25rem}
+    .mobile-drawer.open{transform:translateY(0)}
+    .drawer-link{padding:.7rem .6rem;color:var(--text);text-decoration:none;border-radius:10px}
+    .drawer-link:hover{background:rgba(58,160,255,.12)}
+
+    /* Floating buttons – stacked; theme above toTop */
+    .fab{position:fixed;right:16px;z-index:65;border:none;border-radius:999px;width:48px;height:48px;display:grid;place-items:center;color:#fff;background:var(--fab-bg);opacity:.92;box-shadow:var(--shadow);cursor:pointer;transition:opacity .2s var(--ease), transform .2s var(--ease)}
+    .fab:hover{transform:translateY(-2px);opacity:1}
+    .fab.hide{opacity:0;pointer-events:none;transform:translateY(6px)}
+    #themeFab{bottom:72px}
+    #toTop{bottom:16px}
+
+    /* Sections */
+    .section{padding:clamp(52px,6.5vw,76px) 0;position:relative}
+    .section-title{font-size:clamp(1.5rem,2.4vw,2.1rem);margin:0 0 .4rem;letter-spacing:.3px;text-align:center}
+    .section-subtitle{margin:0 0 1rem;color:var(--muted);text-align:center}
+    .section::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(58,160,255,.35),transparent);opacity:.45}
+
+    /* Hero */
+    .hero-grid{display:grid;grid-template-columns:1fr;align-items:center;gap:clamp(1rem,4vw,3rem);justify-items:center}
+    .hero-left{text-align:center}
+    .glow-title{font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;margin:0 0 .2rem;text-shadow:var(--glow);text-align:center}
+    .subtitle{margin-top:.1rem;color:var(--muted);font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;text-align:center}
+    .rotator{display:block;margin-top:.5rem;color:var(--brand-2);font-family:"Fira Code",monospace;font-size:clamp(1rem,2vw,1.1rem);min-height:1.4em;text-align:center;position:relative}
+    .rotator.swap-out{animation:rotOut .45s var(--ease) forwards}
+    .rotator.swap-in{animation:rotIn .45s var(--ease) forwards}
+    @keyframes rotOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(6px)}}
+    @keyframes rotIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+    .cta-row{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
+    .icon-link{--size:52px;width:var(--size);height:var(--size);display:grid;place-items:center;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));color:var(--text);text-decoration:none;transition:transform .18s, box-shadow .18s, border-color .18s, color .18s, background .18s}
+    .icon-link i{font-size:1.2rem}
+    .icon-link:hover{transform:translateY(-2px) scale(1.06);color:#0b1623;background:linear-gradient(180deg,var(--brand-2),var(--brand));border-color:transparent;box-shadow:0 10px 30px rgba(58,160,255,.45)}
+    .portrait-wrap{position:relative;width:min(360px,85%);margin-inline:auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);margin-top:1rem}
+    .portrait-wrap img{width:100%;display:block;filter:contrast(1.02) saturate(1.05)}
+    .scanline{position:absolute;inset:0;background:repeating-linear-gradient(to bottom, rgba(58,160,255,.08), rgba(58,160,255,.08) 2px, transparent 2px, transparent 4px);mix-blend-mode:soft-light;pointer-events:none;animation:scan 6s linear infinite}
+    @keyframes scan{0%{background-position-y:0}100%{background-position-y:20px}}
+    @media (max-width:760px){.portrait-wrap{width:min(240px,90%)}}
+
+    /* Cards (global) */
+    .card,.exp-card,.project-card,.skill-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
+      transition:transform .18s, box-shadow .18s, border-color .18s
+    }
+    .card:hover,.exp-card:hover,.project-card:hover,.skill-card:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
+
+    /* About (accordion) */
+    .about-grid{display:grid;gap:.9rem;grid-template-columns:1fr}
+    .about-acc details{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+    .about-acc summary{cursor:pointer;padding:1rem 1.1rem;font-weight:700;list-style:none;text-align:center}
+    .about-acc summary::-webkit-details-marker{display:none}
+    .about-acc details:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
+    .about-acc .about-body{padding:0 1.1rem 1.1rem 1.1rem;color:#d9e6ff;text-align:center}
+    html:not(.dark) .about-acc .about-body{color:#17324d}
+
+    /* Education */
+    .edu-grid{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
+    .edu-card,.certs-card{padding:1rem;text-align:center;align-self:stretch}
+    .edu-card h3,.certs-card h3{font-size:1.5rem;margin:0 0 .6rem;text-align:center}
+    .edu-items{display:grid;gap:.75rem;justify-items:center}
+    .edu-item{
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid var(--border);border-radius:14px;padding:.7rem .8rem;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      width:100%;max-width:520px;margin-inline:auto;transition:none
+    }
+    .edu-item .edu-icon{font-size:1.25rem;margin-bottom:.35rem}
+    .edu-item h4{margin:.1rem 0 .2rem;line-height:1.25;text-align:center}
+    .edu-item p{margin:.08rem 0;text-align:center}
+    .program-link{margin-top:.2rem;display:block;color:var(--brand-2);text-decoration:none;text-align:center}
+    .program-link:hover{text-decoration:underline}
+    .certs-card{padding:1rem;text-align:center}
+    .certs{display:grid;gap:.6rem;justify-items:center}
+    .cert{
+      display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:.6rem;border:1px solid var(--border);border-radius:12px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      transition:none; width:100%;max-width:520px
+    }
+    .cert i{font-size:18px;margin-top:2px;color:var(--text)}
+    .cert a{color:var(--brand-2);text-decoration:none}
+    .cert a:hover{text-decoration:underline}
+    .cert-issuer{font-size:.85rem;color:var(--muted);margin-bottom:2px}
+
+    /* Disable hover effects inside Education */
+    #education .card, #education .edu-item, #education .cert {transition:none !important}
+    #education .card:hover, #education .edu-item:hover, #education .cert:hover{
+      transform:none !important;border-color:var(--border) !important;box-shadow:var(--shadow) !important;
+    }
+
+    /* Experience */
+    .timeline{display:grid;gap:.9rem}
+    .exp-card{border-radius:var(--radius);overflow:hidden}
+    .exp-card>summary{list-style:none;display:flex;flex-direction:column;align-items:center;gap:.6rem;cursor:pointer;padding:.9rem 1rem;justify-content:center;text-align:center}
+    .exp-card>summary::-webkit-details-marker{display:none}
+    .company-logo{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border)}
+    .exp-head{display:flex;flex-direction:column;align-items:center;text-align:center}
+    .exp-head h3{margin:0;font-size:1.05rem}
+    .exp-title{font-size:1rem;color:var(--muted);margin-top:2px;text-align:center}
+    .exp-head .exp-dates{display:block;color:var(--muted);font-size:.92rem;margin-top:2px}
+    .exp-card[open]>summary{background:rgba(58,160,255,.08)}
+    .exp-body{padding:0 1.1rem 1rem 1.1rem;color:#d9e6ff;text-align:left}
+    html:not(.dark) .exp-body{color:#17324d}
+    .x-tags{display:flex;gap:.35rem;margin:.25rem 0 0 0;justify-content:center}
+    .x-tags .pill{font-size:.75rem;padding:.22rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
+
+    /* Earlier Career (consistent cards) */
+    .inner-exp{border:1px solid var(--border);border-radius:12px;margin:.6rem 0;overflow:hidden}
+    .inner-exp summary{padding:.9rem 1rem;cursor:pointer;list-style:none;display:flex;flex-direction:column;align-items:center;gap:.2rem;text-align:center}
+    .inner-exp summary::-webkit-details-marker{display:none}
+    .inner-exp:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
+    .inner-exp .exp-title{text-align:center;margin-top:2px}
+    .inner-exp .exp-dates{color:var(--muted);font-size:.92rem; margin-top:.15rem}
+    .inner-exp .inner-body{padding:0 .9rem .8rem .9rem;text-align:left}
+
+    .key-callout{display:flex;align-items:flex-start;gap:.5rem;margin-top:.5rem;padding:.6rem .75rem;border:1px dashed var(--brand);border-radius:12px;background:linear-gradient(180deg,rgba(58,160,255,.08),rgba(255,255,255,0))}
+    .key-callout i{color:var(--brand);margin-top:3px}
+
+    /* Projects */
+    .projects-grid{display:grid;gap:1rem;grid-template-columns:repeat(3,1fr)}
+    .project-card{padding:1rem;text-align:center}
+    .tags{display:flex;gap:.4rem;padding:0;margin:.6rem 0 0;list-style:none;justify-content:center}
+    .tags li{font-size:.8rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted)}
+
+    /* Skills */
+    .skills-note{color:var(--muted);margin-top:.6rem;text-align:center}
+    .skill-section{margin-top:1rem;text-align:center}
+    .skill-section h3{font-size:1.05rem;margin:0 0 .6rem;color:#dbe9ff;text-align:center}
+    html:not(.dark) .skill-section h3{color:#0b1623}
+    .skills-grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));justify-items:center}
+    a.skill-card{text-decoration:none;color:inherit;padding:1rem .6rem;height:140px;min-height:140px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
+    .skill-card i,.skill-card img{font-size:32px;width:32px;height:32px;object-fit:contain}
+    .skill-card span{font-size:.9rem;text-align:center;opacity:.95}
+
+    /* Reveal animations on scroll */
+    .section-reveal{opacity:0;transform:translateY(12px);transition:opacity .6s, transform .6s}
+    .section-reveal.revealed{opacity:1;transform:translateY(0)}
+    body.link-fade{transition:opacity .3s;opacity:.96}
+
+    /* Tighten date spacing under titles inside exp-body content */
+    .exp-body h4{margin: .2rem 0 0}
+    .exp-body .exp-dates{margin-top:.1rem}
+
+    /* Footer */
+    .site-footer{border-top:1px solid var(--border);background:var(--footer-bg)}
+    .footer-inner{padding:1rem 0;text-align:center;color:var(--muted)}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .nav{display:none}.hamburger{display:flex}
+      .projects-grid{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:700px){
+      .projects-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="progress" id="progress"></div>
+
+  <!-- Header -->
+  <header class="site-header page-enter delay-0" id="siteHeader">
+    <div class="container nav-wrap">
+      <a href="#home" class="brand">
+        <img src="assets/JP.PNG" alt="Portrait of Jonathan Pedrero" class="brand-avatar" />
+        <span class="brand-text">JP</span>
+      </a>
+      <nav class="nav" id="nav">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#education" class="nav-link">Education</a>
+        <a href="#experience" class="nav-link">Experience</a>
+        <a href="#projects" class="nav-link">Projects</a>
+        <a href="#skills" class="nav-link">Skills</a>
+        <a href="#contact" class="nav-link">Contact</a>
+        <span class="nav-underline" id="navUnderline"></span>
+      </nav>
+      <button id="hamburger" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-drawer" id="drawer" aria-hidden="true">
+      <a href="#home" class="drawer-link">Home</a>
+      <a href="#about" class="drawer-link">About</a>
+      <a href="#education" class="drawer-link">Education</a>
+      <a href="#experience" class="drawer-link">Experience</a>
+      <a href="#projects" class="drawer-link">Projects</a>
+      <a href="#skills" class="drawer-link">Skills</a>
+      <a href="#contact" class="drawer-link">Contact</a>
+    </div>
+  </header>
+
+  <!-- Floating buttons -->
+  <button id="themeFab" class="fab page-enter delay-2" aria-label="Toggle dark/light"><i class="fa-solid fa-moon"></i></button>
+  <button id="toTop" class="fab hide page-enter delay-2" title="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+
+  <!-- Home -->
+  <section id="home" class="section hero section-reveal page-enter delay-1">
+    <div class="container hero-grid">
+      <div class="hero-left page-enter delay-2">
+        <h1 class="glow-title page-enter delay-2">Jonathan Pedrero</h1>
+        <p class="subtitle page-enter delay-3">IT Operations Professional</p>
+
+        <div class="portrait-wrap page-enter delay-4">
+          <img src="assets/JP.PNG" alt="Portrait of Jonathan Pedrero" />
+          <div class="scanline"></div>
+        </div>
+
+        <span class="rotator page-enter delay-5" id="rotator">Technology Enthusiast</span>
+
+        <div class="cta-row page-enter delay-5">
+          <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="section section-reveal page-enter delay-1">
+    <div class="container">
+      <h2 class="section-title">About</h2>
+      <p class="section-subtitle">Read about this webpage and who I am.</p>
+      <div class="about-grid about-acc">
+        <details class="card">
+          <summary>This Website</summary>
+          <div class="about-body">
+            <p>Welcome to my portfolio! I built this space to be a clear, living snapshot of my work and how I think. A site like this carries more context than a PDF resume: it shows personality, provides room for detail, and evolves with new experience. It’s also a place to share projects and the tools I use every day.</p>
+            <p>Under the hood it’s simple: HTML and CSS with a touch of JavaScript for tasteful animations and accessibility, hosted on GitHub Pages. The goal is clean, fast, and easy to maintain, so the content does the talking.</p>
+          </div>
+        </details>
+
+        <details class="card">
+          <summary>Me (Professional)</summary>
+          <div class="about-body">
+            <p><strong>In a sentence:</strong> I’m a technology enthusiast, problem solver, and people-first IT professional with over six years of hands-on experience focused on IT operations, infrastructure, and process improvement.</p>
+            <p>My passion for technology started back in high school. My dad ran a small PC repair business fixing everything from hardware failures to data recovery and software troubleshooting. But what left the biggest impression wasn’t just what he knew, it was how persistent he was. He could spend hours or days chasing down a problem, and the moment he found the fix? Pure joy.</p>
+            <p>That passion for discovering solutions inspired my own path: a career where I could solve real problems, support others, and keep systems running efficiently, both operationally and systematically.</p>
+            <p>I earned two Associate degrees from Volunteer State Community College and hold multiple IT certifications. As college came to a close, I landed my first internship as an IT Field Engineer. Since then, I’ve gained experience in a wide range of environments, from a corporate IT Service Desk to two startups in infrastructure and engineering. Today, I serve as a Senior IT Systems Administrator at one of the world’s leading cybersecurity companies.</p>
+          </div>
+        </details>
+
+        <details class="card">
+          <summary>Me (Personal)</summary>
+          <div class="about-body">
+            <p>Life isn’t just work; I have a few side quests too! I’m a big fan of sports, gaming, and travel.</p>
+            <p>I love baseball, basketball, and soccer. I generally support South Florida sports teams, and while living in Nashville I (try) to support our local teams too. One of my long-term goals is to visit all 30 Major League Baseball stadiums. So far, I’ve hit 15… which means I’ve still got a lot of miles (and hot dogs) to go.</p>
+            <p>When it comes to gaming, I was once a hardcore PC gamer. These days I stick to consoles. Sure, I miss the buttery-smooth frame rates, but I don’t miss the weekly and sometimes daily firmware, driver, and software updates. I want to boot up and play, not debug and wait.</p>
+            <p>Whether you’re here to talk tech or trade ballpark rankings, I’m just as happy to connect personally as I am professionally. You’ll find links to my social profiles right on the homepage!</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="section section-reveal page-enter delay-1">
+    <div class="container">
+      <h2 class="section-title">Education</h2>
+      <p class="section-subtitle">Academic degrees and professional certifications acquired.</p>
+      <div class="edu-grid">
+        <article class="card edu-card">
+          <h3>College</h3>
+          <div class="edu-items">
+            <div class="edu-item">
+              <div style="text-align:center">
+                <div class="edu-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                <p>Volunteer State Community College</p>
+                <p><strong>Computer Information Technology – Networking, AAS</strong></p>
+                <p>Class of 2022</p>
+                <a class="program-link" href="https://www.volstate.edu/academics/business-and-technology/cit/networking-courses" target="_blank" rel="noopener">Program page</a>
+              </div>
+            </div>
+            <div class="edu-item">
+              <div style="text-align:center">
+                <div class="edu-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                <p>Volunteer State Community College</p>
+                <p><strong>University Parallel – General Studies, AS</strong></p>
+                <p>Class of 2020</p>
+                <a class="program-link" href="https://www.volstate.edu/humanities/general-studies/AS-courses" target="_blank" rel="noopener">Program page</a>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card certs-card">
+          <h3>Certifications</h3>
+          <div class="certs">
+            <div class="cert">
+              <i class="fa-solid fa-shield"></i>
+              <div>
+                <div class="cert-issuer">Okta</div>
+                <strong>Okta Certified Professional</strong><br/>
+                <span>Issued Jan 2025</span><br/>
+                <a href="https://www.credly.com/badges/95c0d6fd-fe0b-467e-b58a-11a79e4d7c99/public_url" target="_blank" rel="noopener">View credential</a>
+              </div>
+            </div>
+            <div class="cert">
+              <i class="fa-brands fa-apple"></i>
+              <div>
+                <div class="cert-issuer">Jamf</div>
+                <strong>Certified Associate (Jamf Pro)</strong><br/>
+                <span>Issued Oct 2024</span><br/>
+                <a href="https://www.credly.com/badges/72384c20-7a8c-4ac5-a652-0cd6eafb7a8c/public_url" target="_blank" rel="noopener">View credential</a>
+              </div>
+            </div>
+            <div class="cert">
+              <i class="fa-solid fa-computer"></i>
+              <div>
+                <div class="cert-issuer">CompTIA</div>
+                <strong>A+</strong><br/>
+                <span>Issued Jul 2023</span><br/>
+                <a href="https://www.credly.com/badges/c25c3a07-ab14-4a6f-9ec9-870f2a7437b4/public_url" target="_blank" rel="noopener">View credential</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section id="experience" class="section section-reveal page-enter delay-1">
+    <div class="container">
+      <h2 class="section-title">Experience</h2>
+      <p class="section-subtitle">Work history related to Information Technology.</p>
+
+      <div class="timeline">
+        <!-- CrowdStrike -->
+        <details class="exp-card">
+          <summary>
+            <img src="assets/logos/crowdstrike.png" class="company-logo" alt="CrowdStrike logo placeholder" />
+            <div class="exp-head">
+              <h3>CrowdStrike</h3>
+              <div class="exp-title">Senior IT Systems Administrator</div>
+              <span class="exp-dates">Oct 2023 – Present</span>
+            </div>
+            <div class="x-tags">
+              <span class="pill">EDR</span><span class="pill">IAM</span><span class="pill">ITIL</span>
+              <span class="pill">Automation</span><span class="pill">Documentation</span>
+            </div>
+          </summary>
+          <div class="exp-body">
+            <p>Due to the public nature of this portfolio website and constant changes in my current role, a detailed job description is not listed here. If you’d like to learn more about my experience at CrowdStrike, contact me for an updated resume.</p>
+            <div class="key-callout"><i class="fa-solid fa-key"></i>
+              <div>
+                <strong>Key high-impact accomplishments:</strong>
+                <ul>
+                  <li>PM and technical lead for Simple Access Request Automation (SARA) self-service access automation with approvals, guardrails, and audit trail with over 2,000 automated requests a month.</li>
+                  <li>Team POC and lead for Problem Management and Major Incident Management, delivering improved incident and runbook processes and reduced MTTR.</li>
+                  <li>Delivery of global team's IT Service Desk Escalation process, standardizing L1 to L3 escalation with SLAs, handoff criteria, and templates.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Bionic -->
+        <details class="exp-card">
+          <summary>
+            <img src="assets/logos/bionic.png" class="company-logo" alt="Bionic logo placeholder" />
+            <div class="exp-head">
+              <h3>Bionic</h3>
+              <div class="exp-title">IT Engineer</div>
+              <span class="exp-dates">May 2023 – Oct 2023</span>
+            </div>
+            <div class="x-tags">
+              <span class="pill">MDM</span><span class="pill">IAM</span><span class="pill">Networking</span>
+              <span class="pill">ZTNA</span><span class="pill">Cloudflare</span>
+            </div>
+          </summary>
+          <div class="exp-body">
+            <p>As the sole AMER IT Engineer at an APSM startup (later acquired by CrowdStrike), I owned frontline remote support while building internal IT operations and secure-by-default user experiences across a distributed workforce.</p>
+            <p>I managed endpoint deployment and patching (JumpCloud), DNS and VPN (Cloudflare), and first-response EDR operations (Falcon). I implemented SSO and SCIM integrations, enforced RBAC, and supported core apps including Notion, Atlassian, AWS, and Google Workspace, automating routine admin flows wherever possible.</p>
+            <div class="key-callout"><i class="fa-solid fa-key"></i>
+              <div>
+                <strong>Key high-impact accomplishments:</strong>
+                <ul>
+                  <li>Successful migration from AWS SSO (IAM Identity Center) to AWS IAM.</li>
+                  <li>Directory integration between JumpCloud and Microsoft 365.</li>
+                  <li>Standardization of CrowdStrike Falcon agent deployment across macOS and Windows.</li>
+                  <li>Deployed secure SOHO networks via Ubiquiti and Meraki for distributed teams in AMER region.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Built Technologies -->
+        <details class="exp-card">
+          <summary>
+            <img src="assets/logos/built.png" class="company-logo" alt="Built Technologies logo placeholder" />
+            <div class="exp-head">
+              <h3>Built Technologies</h3>
+              <div class="exp-title">IT Infrastructure Specialist & Desktop Support Technician II</div>
+              <span class="exp-dates">Dec 2021 – May 2023</span>
+            </div>
+            <div class="x-tags">
+              <span class="pill">MDM</span><span class="pill">IdP</span><span class="pill">Networking</span>
+              <span class="pill">Intune</span><span class="pill">Governance</span>
+            </div>
+          </summary>
+          <div class="exp-body">
+            <h4>IT Infrastructure Specialist</h4>
+            <div class="exp-dates">Nov 2022 – May 2023</div>
+            <p>Led infrastructure-focused support and systems administration in a hybrid environment. Managed JumpCloud and Kandji, zero-touch deployment for macOS and Windows, and improved the out-of-box experience. Administered identity and access via JumpCloud IdP and owned key enterprise apps including Google Workspace, Slack, Zoom, Atlassian, Malwarebytes, Tenable, Automox, 1Password, and Perimeter 81.</p>
+
+            <h4>Desktop Support Technician II</h4>
+            <div class="exp-dates">Dec 2021 – Nov 2022</div>
+            <p>Delivered in-person and remote support for a distributed workforce. Ran Jira Service Management and Confluence, and handled the lifecycle of devices and software assets, including procurement, vendor coordination, imaging, deployment, and shipping logistics. Drove onboarding and assisted security teams with alert triage and endpoint policy enforcement.</p>
+
+            <div class="key-callout"><i class="fa-solid fa-key"></i>
+              <div>
+                <strong>Key high-impact accomplishments:</strong>
+                <ul>
+                  <li>Windows fleet migration from JumpCloud MDM to Microsoft Intune.</li>
+                  <li>Google Groups and shared mailbox governance program.</li>
+                  <li>Network migration from Meraki to Ubiquiti supporting several hundred devices.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Earlier Career -->
+        <details class="exp-card">
+          <summary>
+            <img src="assets/logos/early.png" class="company-logo" alt="Earlier career logo placeholder" />
+            <div class="exp-head">
+              <h3>Earlier Career · IT Support</h3>
+              <div class="exp-title">Contract / Part-time / Internship</div>
+              <span class="exp-dates">May 2019 – Dec 2021</span>
+            </div>
+            <div class="x-tags"><span class="pill">Support</span><span class="pill">Onboarding</span></div>
+          </summary>
+          <div class="exp-body">
+            <details class="inner-exp">
+              <summary>
+                <div><strong>CereCore</strong><div class="exp-title">IT Service Desk Analyst (Contract)</div></div>
+                <span class="exp-dates">May 2021 – Dec 2021</span>
+              </summary>
+              <div class="inner-body">
+                <p>Provided frontline IT support to HealthTrust (HCA Healthcare). Served as the primary point for device imaging, provisioning, shipping and onboarding for 10–20 new hires weekly. Troubleshot across Microsoft 365, SCCM, AirWatch and ServiceNow, with hands-on experience in HP & Dell hardware.</p>
+                <div class="key-callout"><i class="fa-solid fa-key"></i><div><strong>Key high-impact accomplishments:</strong> Streamlined the IT onboarding process, improving internal workflows and end-user experience.</div></div>
+              </div>
+            </details>
+            <details class="inner-exp">
+              <summary>
+                <div><strong>Kentucky Tennessee Conference</strong><div class="exp-title">IT Assistant (Part-time)</div></div>
+                <span class="exp-dates">Oct 2019 – Dec 2020</span>
+              </summary>
+              <div class="inner-body">
+                <p>Supported the organization’s IT Director on a range of initiatives, including AV system deployments for events and end-user support focused on Microsoft 365 applications and services.</p>
+              </div>
+            </details>
+            <details class="inner-exp">
+              <summary>
+                <div><strong>Enable Resource Group</strong><div class="exp-title">IT Field Engineer (Intern)</div></div>
+                <span class="exp-dates">May 2019 – Aug 2019</span>
+              </summary>
+              <div class="inner-body">
+                <p>Supported deployment and management of Christ Presbyterian Academy’s Apple device ecosystem (macOS, iPadOS, iOS) using Jamf Pro and Apple Configurator. Assisted with classroom and lab technology provisioning.</p>
+              </div>
+            </details>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section id="projects" class="section section-reveal page-enter delay-1">
+    <div class="container">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-subtitle">Major projects led or completed in my professional career.</p>
+      <div class="projects-grid">
+        <article class="project-card">
+          <h3>Simple Access Request Automation (SARA)</h3>
+          <p>PM and technical lead for an internal platform that automates self-service access across environments and entitlement services. Built approval flows, guardrails and audit trails to reduce turnaround and access risk.</p>
+          <ul class="tags"><li>IAM</li><li>Automation</li><li>Approvals</li><li>Audit</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>CrowdStrike Falcon Standardization</h3>
+          <p>Unified EDR sensor deployment and health checks for macOS and Windows with policy tiers and playbooks. Reduced false positives and improved response speed.</p>
+          <ul class="tags"><li>EDR</li><li>macOS</li><li>Windows</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>AWS SSO to IAM Migration</h3>
+          <p>Migrated from IAM Identity Center to IAM roles and policies. Implemented least-privilege roles and automated provisioning to cut manual access work.</p>
+          <ul class="tags"><li>AWS</li><li>IAM</li><li>Automation</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>Microsoft Intune Migration</h3>
+          <p>Moved Windows fleet management to Intune from JumpCloud MDM. Established compliance, baseline hardening and reporting for device visibility.</p>
+          <ul class="tags"><li>Intune</li><li>MDM</li><li>Windows</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>JumpCloud & Microsoft 365 Directory Integration</h3>
+          <p>Implemented SSO and SCIM with RBAC standards. Enforced MFA, conditional access and joiner-mover-leaver automation to limit access drift.</p>
+          <ul class="tags"><li>IdP</li><li>SSO</li><li>SCIM</li><li>RBAC</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>Problem & Major Incident Management Enhancements</h3>
+          <p>Drove improvements to problem analysis, ITIL v4-aligned processes and major incident runbooks and communications, leading to lower MTTR and a better administrative experience.</p>
+          <ul class="tags"><li>ITIL</li><li>Incident Response</li><li>Runbooks</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>IT Service Desk Escalation Policy Development</h3>
+          <p>Standardized L1 to L3 escalation with SLAs, handoff criteria and templates. Increased ownership clarity and reduced ticket reopens.</p>
+          <ul class="tags"><li>ITIL</li><li>SLA</li><li>Runbooks</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section id="skills" class="section section-reveal page-enter delay-1">
+    <div class="container">
+      <h2 class="section-title">Skills & Applications</h2>
+      <p class="skills-note">Technical service administrator and / or power user of listed applications.</p>
+
+      <div class="skill-section">
+        <h3>EDR / Security Operations</h3>
+        <div class="skills-grid">
+          <a class="skill-card" href="https://www.crowdstrike.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield-halved"></i><span>CrowdStrike Falcon</span></a>
+          <a class="skill-card" href="https://www.tenable.com/" target="_blank" rel="noopener"><i class="fa-solid fa-bugs"></i><span>Tenable</span></a>
+          <a class="skill-card" href="https://www.malwarebytes.com/" target="_blank" rel="noopener"><i class="fa-solid fa-virus-covid"></i><span>Malwarebytes</span></a>
+          <a class="skill-card" href="https://www.automox.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield"></i><span>Automox</span></a>
+        </div>
+      </div>
+
+      <div class="skill-section">
+        <h3>MDM / Device Management</h3>
+        <div class="skills-grid">
+          <a class="skill-card" href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener"><i class="fa-solid fa-tablet-screen-button"></i><span>Microsoft Intune</span></a>
+          <a class="skill-card" href="https://jumpcloud.com/" target="_blank" rel="noopener"><i class="fa-solid fa-id-card-clip"></i><span>JumpCloud</span></a>
+          <a class="skill-card" href="https://www.kandji.io/" target="_blank" rel="noopener"><i class="fa-solid fa-mobile-screen"></i><span>Kandji</span></a>
+          <a class="skill-card" href="https://www.jamf.com/products/jamf-pro/" target="_blank" rel="noopener"><i class="fa-brands fa-apple"></i><span>Jamf Pro</span></a>
+          <a class="skill-card" href="https://support.apple.com/apple-configurator" target="_blank" rel="noopener"><i class="fa-solid fa-screwdriver-wrench"></i><span>Apple Configurator</span></a>
+          <a class="skill-card" href="https://www.vmware.com/products/workspace-one.html" target="_blank" rel="noopener"><i class="fa-solid fa-mobile"></i><span>AirWatch / WS1</span></a>
+        </div>
+      </div>
+
+      <div class="skill-section">
+        <h3>IAM / Identity</h3>
+        <div class="skills-grid">
+          <a class="skill-card" href="https://azure.microsoft.com/products/active-directory/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>Azure AD / Entra</span></a>
+          <a class="skill-card" href="https://www.okta.com/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>Okta</span></a>
+          <a class="skill-card" href="https://www.perimeter81.com/" target="_blank" rel="noopener"><i class="fa-solid fa-route"></i><span>Perimeter 81</span></a>
+          <a class="skill-card" href="https://ldap.com/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>LDAP / RADIUS</span></a>
+          <a class="skill-card" href="https://oauth.net/" target="_blank" rel="noopener"><i class="fa-solid fa-fingerprint"></i><span>SAML / OAuth / OIDC</span></a>
+        </div>
+      </div>
+
+      <div class="skill-section">
+        <h3>Networking</h3>
+        <div class="skills-grid">
+          <a class="skill-card" href="https://ui.com/" target="_blank" rel="noopener"><i class="fa-solid fa-network-wired"></i><span>Ubiquiti</span></a>
+          <a class="skill-card" href="https://meraki.cisco.com/" target="_blank" rel="noopener"><i class="fa-solid fa-network-wired"></i><span>Meraki</span></a>
+        </div>
+      </div>
+
+      <div class="skill-section">
+        <h3>Cloud / Collaboration</h3>
+        <div class="skills-grid">
+          <a class="skill-card" href="https://aws.amazon.com/" target="_blank" rel="noopener"><i class="fa-solid fa-cloud"></i><span>AWS</span></a>
+          <a class="skill-card" href="https://workspace.google.com/" target="_blank" rel="noopener"><i class="devicon-google-plain"></i><span>Google Workspace</span></a>
+          <a class="skill-card" href="https://slack.com/" target="_blank" rel="noopener"><i class="devicon-slack-plain"></i><span>Slack</span></a>
+          <a class="skill-card" href="https://www.atlassian.com/" target="_blank" rel="noopener"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
+          <a class="skill-card" href="https://sendgrid.com/" target="_blank" rel="noopener"><i class="fa-regular fa-paper-plane"></i><span>SendGrid</span></a>
+          <a class="skill-card" href="https://1password.com/" target="_blank" rel="noopener"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
+          <a class="skill-card" href="https://learn.microsoft.com/mem/configmgr/" target="_blank" rel="noopener"><i class="fa-solid fa-server"></i><span>SCCM</span></a>
+          <a class="skill-card" href="https://www.servicenow.com/" target="_blank" rel="noopener"><i class="fa-solid fa-ticket"></i><span>ServiceNow</span></a>
+          <a class="skill-card" href="https://www.microsoft.com/microsoft-365" target="_blank" rel="noopener"><i class="fa-brands fa-microsoft"></i><span>Microsoft 365</span></a>
+          <a class="skill-card" href="https://learn.microsoft.com/exchange/" target="_blank" rel="noopener"><i class="fa-solid fa-envelopes-bulk"></i><span>Exchange</span></a>
+        </div>
+      </div>
+
+      <div class="skill-section">
+        <h3>Project Management</h3>
+        <div class="skills-grid">
+          <a class="skill-card" href="https://www.atlassian.com/" target="_blank" rel="noopener"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
+          <a class="skill-card" href="https://asana.com/" target="_blank" rel="noopener"><i class="fa-solid fa-puzzle-piece"></i><span>Asana</span></a>
+          <a class="skill-card" href="#" onclick="return false;"><i class="fa-solid fa-table-columns"></i><span>Kanban</span></a>
+          <a class="skill-card" href="#" onclick="return false;"><i class="fa-solid fa-diagram-project"></i><span>Agile Methodology</span></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="section section-reveal page-enter delay-1">
+    <div class="container">
+      <h2 class="section-title">Contact Me</h2>
+      <p class="section-subtitle">Let’s connect!</p>
+      <div class="cta-row" style="justify-content:center;">
+        <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer page-enter delay-1">
+    <div class="container footer-inner">
+      <span>© 2025 Jonathan Pedrero — Built with HTML, CSS, JS, GitHub Pages, & Coffee.</span>
+    </div>
+  </footer>
+
+  <script>
+    // Theme (persisted; default dark)
+    const html = document.documentElement;
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) html.className = savedTheme;
+
+    function smoothThemeSwap(){
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      html.classList.add('theme-x');
+      setTimeout(()=> html.classList.remove('theme-x'), 520);
+    }
+
+    // Page-entry fades + set Home active initially
+    document.addEventListener('DOMContentLoaded', ()=> {
+      document.body.classList.add('page-in');
+      const homeLink = document.querySelector('.nav-link[href="#home"]');
+      if (homeLink){
+        document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));
+        homeLink.classList.add('active');
+        moveUnderline(homeLink);
+      }
+    });
+
+    // Scroll progress
+    const prog = document.getElementById('progress');
+    const setProgress = () => {
+      const max = document.body.scrollHeight - window.innerHeight;
+      const pct = Math.max(0, Math.min(1, window.scrollY / max));
+      prog.style.cssText = `.progress::after{transform:scaleX(${pct});}`;
+    };
+    window.addEventListener('scroll', setProgress, {passive:true});
+    setTimeout(setProgress, 10);
+
+    // Floating buttons
+    const themeFab = document.getElementById('themeFab');
+    const toTop = document.getElementById('toTop');
+
+    const updateFabIcon = () => {
+      themeFab.innerHTML = html.classList.contains('dark')
+        ? '<i class="fa-solid fa-moon"></i>'
+        : '<i class="fa-solid fa-sun"></i>';
+    };
+    updateFabIcon();
+
+    themeFab.addEventListener('click', () => {
+      smoothThemeSwap();
+      html.classList.toggle('dark');
+      const theme = html.classList.contains('dark') ? 'dark' : '';
+      html.className = theme;
+      localStorage.setItem('theme', theme);
+      updateFabIcon();
+    });
+
+    // Back to top visibility (independent of section)
+    const toggleTopBtn = () => {
+      const show = window.scrollY > 300;
+      toTop.classList.toggle('hide', !show);
+    };
+    window.addEventListener('scroll', toggleTopBtn, {passive:true});
+    toggleTopBtn();
+    toTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Hamburger + drawer
+    const burger = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    const toggleDrawer = (open) => {
+      drawer.setAttribute('aria-hidden', !open);
+      burger.setAttribute('aria-expanded', open);
+      drawer.classList.toggle('open', open);
+      burger.classList.toggle('open', open);
+    };
+    burger.addEventListener('click', () => toggleDrawer(!drawer.classList.contains('open')));
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleDrawer(false)));
+
+    // Section reveal on scroll
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.section-reveal').forEach(sec => observer.observe(sec));
+
+    // Link fade between sections
+    const navLinks = document.querySelectorAll('.nav-link, .drawer-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        document.body.classList.add('link-fade');
+        setTimeout(() => document.body.classList.remove('link-fade'), 300);
+      });
+    });
+
+    // Rotating descriptors – smoother crossfade
+    const rotator = document.getElementById('rotator');
+    const phrases = ['Technology Enthusiast', 'Problem Solver', 'Senior Systems Administrator', 'Security Advocate'];
+    let idx = 1;
+    function swapPhrase(){
+      rotator.classList.remove('swap-in');
+      rotator.classList.add('swap-out');
+      setTimeout(() => {
+        rotator.textContent = phrases[idx];
+        rotator.classList.remove('swap-out');
+        rotator.classList.add('swap-in');
+        idx = (idx + 1) % phrases.length;
+      }, 450);
+    }
+    setInterval(swapPhrase, 2600);
+
+    // Reactive nav underline
+    const sections = document.querySelectorAll('section');
+    const navMap = {};
+    document.querySelectorAll('.nav a.nav-link').forEach(a => navMap[a.getAttribute('href').replace('#','')] = a);
+    const underline = document.getElementById('navUnderline');
+    function moveUnderline(el){
+      const nav = document.getElementById('nav');
+      const nb = nav.getBoundingClientRect();
+      const b = el.getBoundingClientRect();
+      const left = b.left - nb.left + nav.scrollLeft + 8;
+      const width = b.width - 16;
+      underline.style.left = left + 'px';
+      underline.style.width = Math.max(0, width) + 'px';
+    }
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const id = e.target.id;
+          if (navMap[id]) {
+            Object.values(navMap).forEach(n => n.classList.remove('active'));
+            navMap[id].classList.add('active');
+            moveUnderline(navMap[id]);
+          }
+        }
+      })
+    }, { threshold: 0.5 });
+    sections.forEach(s => spy.observe(s));
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('mouseenter', () => moveUnderline(link));
+      link.addEventListener('mouseleave', () => {
+        const active = document.querySelector('.nav-link.active') || document.querySelector('.nav-link[href="#home"]');
+        moveUnderline(active);
+      });
+    });
+  </script>
+</body>
+</html>
