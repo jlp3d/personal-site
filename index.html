@@ -46,9 +46,9 @@
       color:var(--text);border:1px solid var(--border);border-radius:10px;z-index:100;
     }
 
-    /* Page-entry fade-ins */
-    .page-enter{opacity:0;transform:translateY(10px)}
-    body.page-in .page-enter{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
+    /* ------- Page-entry fade-ins (~2s) ------- */
+    .page-enter{opacity:0;transform:translateY(10px);will-change:opacity,transform}
+    body.page-in .page-enter{opacity:1;transform:none;transition:opacity 2s var(--ease), transform 2s var(--ease)}
     .delay-0{transition-delay:0s}
     .delay-1{transition-delay:.08s}
     .delay-2{transition-delay:.16s}
@@ -108,8 +108,6 @@
     .section-title{font-size:clamp(1.5rem,2.4vw,2.1rem);margin:0 0 .6rem;letter-spacing:.3px;text-align:center}
     .section-subtitle{margin:0 0 1.2rem;color:var(--muted);text-align:center}
 
-    /* No per-section fills so global aurora shows everywhere */
-
     /* Strong divider after Home (keep blue, full-bleed) */
     #home{padding-bottom:64px}
     #home::after{
@@ -132,7 +130,7 @@
     @media (min-width:1000px){
       .hero-grid{grid-template-columns:1.1fr 1fr;gap:clamp(1.2rem,4vw,3rem)}
       .hero-copy{justify-self:start;text-align:left;order:1}
-      .hero-photo{justify-self:end;order:2;justify-content:flex-end}
+      .hero-photo{justify-self=end;order:2;justify-content:flex-end}
     }
 
     .welcome{margin:.2rem 0 .4rem;text-align:center;font-weight:800;color:var(--brand-2);letter-spacing:.3px}
@@ -174,7 +172,15 @@
     .btn:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 10px 30px rgba(58,160,255,.25)}
     .btn:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 
-    .rotator{display:block;margin-top:.5rem;color:var(--brand-2);font-family:"Fira Code",monospace;font-size:clamp(1rem,2vw,1.1rem);min-height:1.4em;position:relative}
+    /* Rotator with fade animation per cycle */
+    .rotator{
+      display:block;margin-top:.5rem;color:var(--brand-2);
+      font-family:"Fira Code",monospace;font-size:clamp(1rem,2vw,1.1rem);
+      min-height:1.4em;position:relative;opacity:1;transition:opacity .7s var(--ease);
+      will-change:opacity;
+    }
+    .rotator.swap-out{opacity:0}
+    .rotator.swap-in{opacity:1}
 
     /* Cards (global) */
     .card,.exp-card,.project-card,.skill-card{
@@ -191,15 +197,12 @@
     .summary-affordance{
       position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
       display:inline-flex;align-items:center;gap:.3rem;color:var(--muted);
-      /* keep container small; we size the arrow itself below */
       font-size:.8rem;
     }
     .summary-affordance .chev{
       display:inline-block;transform:rotate(-90deg);transition:transform .2s var(--ease);
-      font-size:1rem; /* base size for all */
-      line-height:1;
+      font-size:1rem;line-height:1;
     }
-    /* Slightly bigger arrows on wider screens */
     @media (min-width:1000px){
       .summary-affordance .chev{font-size:1.2rem}
     }
@@ -211,18 +214,16 @@
       overflow:hidden;
       max-height:0;
       transition:max-height .38s var(--ease), opacity .38s var(--ease);
-      opacity:0;
+      opacity:0; will-change:max-height,opacity;
     }
     details[open] > .collapsible,
-    details[open] .collapsible{
-      opacity:1;
-    }
+    details[open] .collapsible{ opacity:1; }
 
     /* About */
     .about-grid{display:grid;gap:.9rem;grid-template-columns:1fr}
     .about-acc details{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
     .about-acc summary{padding:1rem 1.1rem;font-weight:700;text-align:center}
-    .about-acc .about-body{padding:0 1.1rem 1.1rem 1.1rem;color:#d9e6ff;text-align:center}
+    .about-acc .about-body{padding:0 1.1rem 1.1rem 1.1rem;color:#d9e6ff;text-align:left}
 
     /* Education */
     .edu-grid{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
@@ -257,7 +258,7 @@
 
     /* Experience */
     .timeline{display:grid;gap:.9rem}
-    .exp-card{border-radius:var(--radius);overflow:hidden}
+    .exp-card{border-radius:var(--radius);overflow:visible;}
     .exp-card>summary{display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:.9rem 1rem;justify-content:center;text-align:center}
     .company-logo{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border)}
     .exp-head{display:flex;flex-direction:column;align-items:center;text-align:center}
@@ -270,7 +271,7 @@
     .x-tags .pill{font-size:.75rem;padding:.22rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
 
     /* Earlier Career (cards) */
-    .inner-exp{border:1px solid var(--border);border-radius:12px;margin:.6rem 0;overflow:hidden}
+    .inner-exp{border:1px solid var(--border);border-radius:12px;margin:.6rem 0;overflow:visible;}
     .inner-exp summary{padding:.9rem 1rem;text-align:center;position:relative;padding-right:2.75rem;list-style:none}
     .inner-exp .exp-title{margin-top:2px}
     .inner-exp .exp-dates{color:var(--muted);font-size:.92rem;margin-top:.15rem}
@@ -295,9 +296,10 @@
     .skill-card i,.skill-card img{font-size:32px;width:32px;height:32px;object-fit:contain}
     .skill-card span{font-size:.9rem;text-align:center;opacity:.95}
 
-    /* Reveal animations on scroll */
-    .section-reveal{opacity:0;transform:translateY(12px);transition:opacity .6s, transform .6s}
+    /* ------- Scroll-reveal animation for sections (~2s) ------- */
+    .section-reveal{opacity:0;transform:translateY(12px);transition:opacity 2s var(--ease), transform 2s var(--ease);will-change:opacity,transform}
     .section-reveal.revealed{opacity:1;transform:translateY(0)}
+
     body.link-fade{transition:opacity .3s;opacity:.96}
 
     /* Footer */
@@ -752,7 +754,7 @@
       </div>
     </section>
 
-    <!-- Skills -->
+    <!-- Skills & Applications -->
     <section id="skills" class="section section-reveal page-enter delay-1">
       <div class="container">
         <h2 class="section-title">Skills & Applications</h2>
@@ -902,10 +904,10 @@
     burger.addEventListener('click', () => toggleDrawer(!drawer.classList.contains('open')));
     drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleDrawer(false)));
 
-    // Section reveal on scroll
+    // ------- Scroll-reveal on sections (adds .revealed) -------
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('revealed'); });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.12 });
     document.querySelectorAll('.section-reveal').forEach(sec => observer.observe(sec));
 
     // Link fade between sections
@@ -917,7 +919,7 @@
       });
     });
 
-    // Rotating descriptors
+    // ------- Rotating descriptors: fade-out/in each cycle -------
     const rotator = document.getElementById('rotator');
     const phrases = ['Technology Enthusiast', 'Problem Solver', 'Senior Systems Administrator', 'Security Advocate'];
     let idx = 1;
@@ -929,9 +931,9 @@
         rotator.classList.remove('swap-out');
         rotator.classList.add('swap-in');
         idx = (idx + 1) % phrases.length;
-      }, 450);
+      }, 700); // matches .rotator opacity transition (.7s)
     }
-    setInterval(swapPhrase, 2600);
+    setInterval(swapPhrase, 3200);
 
     // Reactive nav underline + brand text swap
     const sections = document.querySelectorAll('section');
@@ -996,7 +998,7 @@
             });
           } else {
             content.style.maxHeight = content.scrollHeight + 'px';
-            void content.offsetHeight;
+            void content.offsetHeight; // reflow
             content.style.maxHeight = '0px';
             content.style.opacity = '0';
           }
@@ -1004,6 +1006,17 @@
       });
     }
     setupDetailsAnimation();
+
+    // Recalculate heights on window resize (helps nested details on mobile)
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        document.querySelectorAll('details[open] .collapsible').forEach(c => {
+          c.style.maxHeight = 'none';
+        });
+      }, 120);
+    });
   </script>
 </body>
 </html>
