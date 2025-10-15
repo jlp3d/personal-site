@@ -27,26 +27,6 @@
       --fab-bg:#17324d; --header-bg:linear-gradient(180deg,#06101a,#0a1420);
       --footer-bg:linear-gradient(0deg,#06101a,#0a1420);
       --ease:cubic-bezier(.2,.6,.2,1);
-      --theme-ms:480ms;
-    }
-    html:not(.dark){
-      --bg:#cfd8e3; --panel:#e4ebf4; --text:#0c1522; --muted:#334e68;
-      --brand:#1f5fd1; --brand-2:#5b9af5; --border:#b1c1d6;
-      --shadow:0 10px 24px rgba(0,0,0,.08);
-      --fab-bg:#0c1522; --header-bg:linear-gradient(180deg,#bccbe0,#b2c3da);
-      --footer-bg:linear-gradient(0deg,#bccbe0,#b2c3da);
-    }
-    @media (prefers-reduced-motion: no-preference){
-      html.theme-x *{
-        transition:
-          color var(--theme-ms) var(--ease),
-          background var(--theme-ms) var(--ease),
-          background-color var(--theme-ms) var(--ease),
-          border-color var(--theme-ms) var(--ease),
-          box-shadow var(--theme-ms) var(--ease),
-          fill var(--theme-ms) var(--ease),
-          stroke var(--theme-ms) var(--ease) !important;
-      }
     }
 
     *{box-sizing:border-box}
@@ -74,10 +54,6 @@
       radial-gradient(35% 55% at 85% 15%, rgba(110,224,255,.12), transparent 60%),
       radial-gradient(45% 65% at 50% 100%, rgba(40,80,160,.2), transparent 60%);
       animation:aurora 18s ease-in-out infinite alternate}
-    html:not(.dark) body::before{background:
-      radial-gradient(40% 60% at 15% 10%, rgba(96,165,250,.32), transparent 60%),
-      radial-gradient(35% 55% at 85% 15%, rgba(125,211,252,.28), transparent 60%),
-      radial-gradient(45% 65% at 50% 100%, rgba(120,140,165,.34), transparent 60%)}
     @keyframes aurora{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-2%) scale(1.02)}}
     .noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.5"/></svg>');mix-blend-mode:overlay}
 
@@ -90,12 +66,11 @@
     .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.7rem 0}
     .brand{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--text)}
     .brand-avatar{width:40px;height:40px;object-fit:cover;border-radius:50%;border:1px solid var(--border);box-shadow:var(--shadow)}
-    .brand-text{font-family:"Fira Code",monospace;font-weight:800;letter-spacing:.5px;color:var(--text);opacity:.85}
+    .brand-text{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:800;letter-spacing:.2px;color:var(--text);opacity:.9}
     .nav{position:relative;display:flex;gap:.5rem}
     .nav-link{position:relative;color:var(--muted);text-decoration:none;padding:.45rem .65rem;border-radius:10px;transition:transform .2s,color .2s,background .2s}
     .nav-link:hover{color:var(--text);background:rgba(58,160,255,.12);transform:translateY(-1px)}
     .nav-underline{position:absolute;bottom:2px;left:0;height:2px;width:0;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2));transition:transform .25s,width .25s,left .25s}
-    html:not(.dark) .nav-link{color:#4e6a87}
     .hamburger{display:none;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer}
     .hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .2s, opacity .2s}
     .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -106,11 +81,11 @@
     .drawer-link{padding:.7rem .6rem;color:var(--text);text-decoration:none;border-radius:10px}
     .drawer-link:hover{background:rgba(58,160,255,.12)}
 
-    /* Floating buttons – stacked; theme above toTop */
+    /* Floating button – Back to Top only */
     .fab{position:fixed;right:16px;z-index:65;border:none;border-radius:999px;width:48px;height:48px;display:grid;place-items:center;color:#fff;background:var(--fab-bg);opacity:.92;box-shadow:var(--shadow);cursor:pointer;transition:opacity .2s var(--ease), transform .2s var(--ease)}
     .fab:hover{transform:translateY(-2px);opacity:1}
-    .fab.hide{opacity:0;pointer-events:none;transform:translateY(6px)}
-    #themeFab{bottom:72px}
+    /* Make it clickable at any time (even during transitions) */
+    .fab.hide{opacity:0;transform:translateY(6px)}
     #toTop{bottom:16px}
 
     /* Sections */
@@ -134,11 +109,13 @@
     .icon-link{--size:52px;width:var(--size);height:var(--size);display:grid;place-items:center;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));color:var(--text);text-decoration:none;transition:transform .18s, box-shadow .18s, border-color .18s, color .18s, background .18s}
     .icon-link i{font-size:1.2rem}
     .icon-link:hover{transform:translateY(-2px) scale(1.06);color:#0b1623;background:linear-gradient(180deg,var(--brand-2),var(--brand));border-color:transparent;box-shadow:0 10px 30px rgba(58,160,255,.45)}
-    .portrait-wrap{position:relative;width:min(360px,85%);margin-inline:auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);margin-top:1rem}
+
+    /* Smaller portrait */
+    .portrait-wrap{position:relative;width:min(300px,75%);margin-inline:auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);margin-top:1rem}
     .portrait-wrap img{width:100%;display:block;filter:contrast(1.02) saturate(1.05)}
     .scanline{position:absolute;inset:0;background:repeating-linear-gradient(to bottom, rgba(58,160,255,.08), rgba(58,160,255,.08) 2px, transparent 2px, transparent 4px);mix-blend-mode:soft-light;pointer-events:none;animation:scan 6s linear infinite}
     @keyframes scan{0%{background-position-y:0}100%{background-position-y:20px}}
-    @media (max-width:760px){.portrait-wrap{width:min(240px,90%)}}
+    @media (max-width:760px){.portrait-wrap{width:min(200px,85%)}}
 
     /* Cards (global) */
     .card,.exp-card,.project-card,.skill-card{
@@ -155,7 +132,6 @@
     .about-acc summary::-webkit-details-marker{display:none}
     .about-acc details:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
     .about-acc .about-body{padding:0 1.1rem 1.1rem 1.1rem;color:#d9e6ff;text-align:center}
-    html:not(.dark) .about-acc .about-body{color:#17324d}
 
     /* Education */
     .edu-grid{display:grid;gap:1rem;grid-template-columns:1fr 1fr}
@@ -185,10 +161,24 @@
     .cert a:hover{text-decoration:underline}
     .cert-issuer{font-size:.85rem;color:var(--muted);margin-bottom:2px}
 
-    /* Disable hover effects inside Education */
-    #education .card, #education .edu-item, #education .cert {transition:none !important}
-    #education .card:hover, #education .edu-item:hover, #education .cert:hover{
-      transform:none !important;border-color:var(--border) !important;box-shadow:var(--shadow) !important;
+    /* Mobile: stack College then Certifications; widen content */
+    @media (max-width:860px){
+      .edu-grid{grid-template-columns:1fr}
+      .edu-item,.cert{max-width:100%}
+    }
+
+    /* Remove hover animation on Education cards/items */
+    #education .edu-card,
+    #education .certs-card,
+    #education .edu-item,
+    #education .cert{transition:none !important}
+    #education .edu-card:hover,
+    #education .certs-card:hover,
+    #education .edu-item:hover,
+    #education .cert:hover{
+      transform:none !important;
+      border-color:var(--border) !important;
+      box-shadow:var(--shadow) !important;
     }
 
     /* Experience */
@@ -203,7 +193,6 @@
     .exp-head .exp-dates{display:block;color:var(--muted);font-size:.92rem;margin-top:2px}
     .exp-card[open]>summary{background:rgba(58,160,255,.08)}
     .exp-body{padding:0 1.1rem 1rem 1.1rem;color:#d9e6ff;text-align:left}
-    html:not(.dark) .exp-body{color:#17324d}
     .x-tags{display:flex;gap:.35rem;margin:.25rem 0 0 0;justify-content:center}
     .x-tags .pill{font-size:.75rem;padding:.22rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
 
@@ -215,7 +204,6 @@
     .inner-exp .exp-title{text-align:center;margin-top:2px}
     .inner-exp .exp-dates{color:var(--muted);font-size:.92rem; margin-top:.15rem}
     .inner-exp .inner-body{padding:0 .9rem .8rem .9rem;text-align:left}
-
     .key-callout{display:flex;align-items:flex-start;gap:.5rem;margin-top:.5rem;padding:.6rem .75rem;border:1px dashed var(--brand);border-radius:12px;background:linear-gradient(180deg,rgba(58,160,255,.08),rgba(255,255,255,0))}
     .key-callout i{color:var(--brand);margin-top:3px}
 
@@ -229,7 +217,6 @@
     .skills-note{color:var(--muted);margin-top:.6rem;text-align:center}
     .skill-section{margin-top:1rem;text-align:center}
     .skill-section h3{font-size:1.05rem;margin:0 0 .6rem;color:#dbe9ff;text-align:center}
-    html:not(.dark) .skill-section h3{color:#0b1623}
     .skills-grid{display:grid;gap:.8rem;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));justify-items:center}
     a.skill-card{text-decoration:none;color:inherit;padding:1rem .6rem;height:140px;min-height:140px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem}
     .skill-card i,.skill-card img{font-size:32px;width:32px;height:32px;object-fit:contain}
@@ -241,7 +228,7 @@
     body.link-fade{transition:opacity .3s;opacity:.96}
 
     /* Tighten date spacing under titles inside exp-body content */
-    .exp-body h4{margin: .2rem 0 0}
+    .exp-body h4{margin:.2rem 0 0}
     .exp-body .exp-dates{margin-top:.1rem}
 
     /* Footer */
@@ -267,7 +254,7 @@
     <div class="container nav-wrap">
       <a href="#home" class="brand">
         <img src="assets/JP.PNG" alt="Portrait of Jonathan Pedrero" class="brand-avatar" />
-        <span class="brand-text">JP</span>
+        <span class="brand-text" id="brandText">JP</span>
       </a>
       <nav class="nav" id="nav">
         <a href="#home" class="nav-link">Home</a>
@@ -292,8 +279,7 @@
     </div>
   </header>
 
-  <!-- Floating buttons -->
-  <button id="themeFab" class="fab page-enter delay-2" aria-label="Toggle dark/light"><i class="fa-solid fa-moon"></i></button>
+  <!-- Floating button (Back to Top only) -->
   <button id="toTop" class="fab hide page-enter delay-2" title="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
   <!-- Home -->
@@ -452,6 +438,7 @@
                   <li>PM and technical lead for Simple Access Request Automation (SARA) self-service access automation with approvals, guardrails, and audit trail with over 2,000 automated requests a month.</li>
                   <li>Team POC and lead for Problem Management and Major Incident Management, delivering improved incident and runbook processes and reduced MTTR.</li>
                   <li>Delivery of global team's IT Service Desk Escalation process, standardizing L1 to L3 escalation with SLAs, handoff criteria, and templates.</li>
+                  <li>Developed a Slack app and Slack Workflow automations for IT support channels that recognize recurring questions and auto-reply with targeted knowledge-base articles and request forms, driving self-service and reducing duplicate tickets.</li>
                 </ul>
               </div>
             </div>
@@ -612,6 +599,22 @@
           <p>Standardized L1 to L3 escalation with SLAs, handoff criteria and templates. Increased ownership clarity and reduced ticket reopens.</p>
           <ul class="tags"><li>ITIL</li><li>SLA</li><li>Runbooks</li></ul>
         </article>
+        <!-- New projects -->
+        <article class="project-card">
+          <h3>Network Migration: Meraki → Ubiquiti</h3>
+          <p>Planned and executed multi-site migration from Cisco Meraki to Ubiquiti, including switch/AP replacements, VLAN design, and monitoring. Improved performance and reduced licensing costs.</p>
+          <ul class="tags"><li>Networking</li><li>Ubiquiti</li><li>Meraki</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>Google Groups Governance Program</h3>
+          <p>Established naming standards, access policies, lifecycle rules, and request/approval workflows for Google Groups and shared mailboxes to reduce sprawl and access risk.</p>
+          <ul class="tags"><li>Governance</li><li>Google Workspace</li><li>RBAC</li></ul>
+        </article>
+        <article class="project-card">
+          <h3>Slack App & Workflow Automations</h3>
+          <p>Leveraged Slack app and workflow features to respond to recurring IT questions and auto-reply with tailored knowledge-base articles and request forms, guiding users to self-serve and reducing duplicate tickets.</p>
+          <ul class="tags"><li>Slack</li><li>Automation</li><li>Workflows</li></ul>
+        </article>
       </div>
     </div>
   </section>
@@ -696,7 +699,6 @@
   <section id="contact" class="section section-reveal page-enter delay-1">
     <div class="container">
       <h2 class="section-title">Contact Me</h2>
-      <p class="section-subtitle">Let’s connect!</p>
       <div class="cta-row" style="justify-content:center;">
         <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
         <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
@@ -713,17 +715,6 @@
   </footer>
 
   <script>
-    // Theme (persisted; default dark)
-    const html = document.documentElement;
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) html.className = savedTheme;
-
-    function smoothThemeSwap(){
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      html.classList.add('theme-x');
-      setTimeout(()=> html.classList.remove('theme-x'), 520);
-    }
-
     // Page-entry fades + set Home active initially
     document.addEventListener('DOMContentLoaded', ()=> {
       document.body.classList.add('page-in');
@@ -745,33 +736,33 @@
     window.addEventListener('scroll', setProgress, {passive:true});
     setTimeout(setProgress, 10);
 
-    // Floating buttons
-    const themeFab = document.getElementById('themeFab');
+    // Back to top visibility (hide while Home OR About is visible)
     const toTop = document.getElementById('toTop');
+    const homeSection = document.getElementById('home');
+    const aboutSection = document.getElementById('about');
+    toTop.classList.add('hide'); // start hidden
 
-    const updateFabIcon = () => {
-      themeFab.innerHTML = html.classList.contains('dark')
-        ? '<i class="fa-solid fa-moon"></i>'
-        : '<i class="fa-solid fa-sun"></i>';
-    };
-    updateFabIcon();
-
-    themeFab.addEventListener('click', () => {
-      smoothThemeSwap();
-      html.classList.toggle('dark');
-      const theme = html.classList.contains('dark') ? 'dark' : '';
-      html.className = theme;
-      localStorage.setItem('theme', theme);
-      updateFabIcon();
-    });
-
-    // Back to top visibility (independent of section)
+    const visibility = { home: false, about: false };
     const toggleTopBtn = () => {
-      const show = window.scrollY > 300;
-      toTop.classList.toggle('hide', !show);
+      const eitherVisible = visibility.home || visibility.about;
+      toTop.classList.toggle('hide', eitherVisible);
     };
-    window.addEventListener('scroll', toggleTopBtn, {passive:true});
-    toggleTopBtn();
+
+    const visObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.target.id === 'home') visibility.home = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+          if (entry.target.id === 'about') visibility.about = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+        });
+        toggleTopBtn();
+      },
+      { threshold: 0.35 }
+    );
+
+    visObserver.observe(homeSection);
+    visObserver.observe(aboutSection);
+
+    // Always allow clicking (even during transitions)
     toTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
 
     // Hamburger + drawer
@@ -817,11 +808,13 @@
     }
     setInterval(swapPhrase, 2600);
 
-    // Reactive nav underline
+    // Reactive nav underline + brand text swap
     const sections = document.querySelectorAll('section');
     const navMap = {};
     document.querySelectorAll('.nav a.nav-link').forEach(a => navMap[a.getAttribute('href').replace('#','')] = a);
     const underline = document.getElementById('navUnderline');
+    const brandText = document.getElementById('brandText');
+
     function moveUnderline(el){
       const nav = document.getElementById('nav');
       const nb = nav.getBoundingClientRect();
@@ -831,6 +824,7 @@
       underline.style.left = left + 'px';
       underline.style.width = Math.max(0, width) + 'px';
     }
+
     const spy = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
@@ -839,6 +833,9 @@
             Object.values(navMap).forEach(n => n.classList.remove('active'));
             navMap[id].classList.add('active');
             moveUnderline(navMap[id]);
+
+            // Change header text: 'JP' on Home, 'Jonathan Pedrero' elsewhere
+            brandText.textContent = (id === 'home') ? 'JP' : 'Jonathan Pedrero';
           }
         }
       })
