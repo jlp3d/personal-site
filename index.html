@@ -14,6 +14,7 @@
   <link rel="icon" href="assets/favicon.png" />
 
   <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
@@ -38,6 +39,13 @@
 
     .container{width:min(1100px,92%);margin-inline:auto}
 
+    /* Skip link */
+    .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+    .skip-link:focus{
+      left:16px;top:10px;width:auto;height:auto;padding:.5rem .75rem;background:var(--panel);
+      color:var(--text);border:1px solid var(--border);border-radius:10px;z-index:100;
+    }
+
     /* Page-entry fade-ins */
     .page-enter{opacity:0;transform:translateY(10px)}
     body.page-in .page-enter{opacity:1;transform:none;transition:opacity .7s var(--ease), transform .7s var(--ease)}
@@ -47,8 +55,12 @@
     .delay-3{transition-delay:.24s}
     .delay-4{transition-delay:.32s}
     .delay-5{transition-delay:.40s}
+    @media (prefers-reduced-motion: reduce){
+      .page-enter{opacity:0}
+      body.page-in .page-enter{transform:none;transition:none;opacity:1}
+    }
 
-    /* Background aurora + noise */
+    /* Global background aurora + noise (applies site-wide) */
     body::before{content:"";position:fixed;inset:0;z-index:-2;background:
       radial-gradient(40% 60% at 15% 10%, rgba(58,160,255,.14), transparent 60%),
       radial-gradient(35% 55% at 85% 15%, rgba(110,224,255,.12), transparent 60%),
@@ -62,14 +74,15 @@
     .progress::after{content:"";display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--brand),var(--brand-2));transform-origin:left;transform:scaleX(0);transition:transform .1s linear}
 
     /* Header / nav */
-    .site-header{position:sticky;top:0;z-index:60;background:var(--header-bg);border-bottom:1px solid var(--border);backdrop-filter:blur(10px) saturate(1.2);transition: background .25s var(--ease), border-color .25s var(--ease)}
+    .site-header{position:sticky;top:0;z-index:60;background:var(--header-bg);border-bottom:1px solid var(--border);backdrop-filter:blur(10px) saturate(1.2)}
     .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.7rem 0}
     .brand{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--text)}
     .brand-avatar{width:40px;height:40px;object-fit:cover;border-radius:50%;border:1px solid var(--border);box-shadow:var(--shadow)}
-    .brand-text{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-weight:800;letter-spacing:.2px;color:var(--text);opacity:.9}
-    .nav{position:relative;display:flex;gap:.5rem}
+    .brand-text{font-weight:800;letter-spacing:.2px;opacity:.9}
+    nav[aria-label="Primary"]{position:relative;display:flex;gap:.5rem}
     .nav-link{position:relative;color:var(--muted);text-decoration:none;padding:.45rem .65rem;border-radius:10px;transition:transform .2s,color .2s,background .2s}
     .nav-link:hover{color:var(--text);background:rgba(58,160,255,.12);transform:translateY(-1px)}
+    .nav-link:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
     .nav-underline{position:absolute;bottom:2px;left:0;height:2px;width:0;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2));transition:transform .25s,width .25s,left .25s}
     .hamburger{display:none;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer}
     .hamburger span{display:block;width:24px;height:2px;background:var(--text);transition:transform .2s, opacity .2s}
@@ -80,42 +93,88 @@
     .mobile-drawer.open{transform:translateY(0)}
     .drawer-link{padding:.7rem .6rem;color:var(--text);text-decoration:none;border-radius:10px}
     .drawer-link:hover{background:rgba(58,160,255,.12)}
+    .drawer-link:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 
     /* Floating button – Back to Top only */
     .fab{position:fixed;right:16px;z-index:65;border:none;border-radius:999px;width:48px;height:48px;display:grid;place-items:center;color:#fff;background:var(--fab-bg);opacity:.92;box-shadow:var(--shadow);cursor:pointer;transition:opacity .2s var(--ease), transform .2s var(--ease)}
     .fab:hover{transform:translateY(-2px);opacity:1}
-    /* Make it clickable at any time (even during transitions) */
     .fab.hide{opacity:0;transform:translateY(6px)}
     #toTop{bottom:16px}
+    #toTop:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
 
     /* Sections */
-    .section{padding:clamp(52px,6.5vw,76px) 0;position:relative}
-    .section-title{font-size:clamp(1.5rem,2.4vw,2.1rem);margin:0 0 .4rem;letter-spacing:.3px;text-align:center}
-    .section-subtitle{margin:0 0 1rem;color:var(--muted);text-align:center}
-    .section::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:60%;height:1px;background:linear-gradient(90deg,transparent,rgba(58,160,255,.35),transparent);opacity:.45}
+    main{display:block}
+    .section{padding:clamp(60px,7vw,90px) 0;position:relative}
+    .section-title{font-size:clamp(1.5rem,2.4vw,2.1rem);margin:0 0 .6rem;letter-spacing:.3px;text-align:center}
+    .section-subtitle{margin:0 0 1.2rem;color:var(--muted);text-align:center}
+
+    /* No per-section fills so global aurora shows everywhere */
+
+    /* Strong divider after Home (keep blue, full-bleed) */
+    #home{padding-bottom:64px}
+    #home::after{
+      content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+      background:linear-gradient(90deg, rgba(58,160,255,0), rgba(58,160,255,.65), rgba(58,160,255,0));
+      box-shadow:0 0 18px rgba(58,160,255,.35);
+    }
+
+    /* Subtle single-line dividers for every other section (avoid adding another at top of #about) */
+    section:not(#home):not(#about)::before{
+      content:"";position:absolute;left:0;right:0;top:0;height:1px;
+      background:linear-gradient(90deg, rgba(58,160,255,.12) 0%, rgba(58,160,255,.28) 50%, rgba(58,160,255,.12) 100%);
+      opacity:.55;
+    }
 
     /* Hero */
-    .hero-grid{display:grid;grid-template-columns:1fr;align-items:center;gap:clamp(1rem,4vw,3rem);justify-items:center}
-    .hero-left{text-align:center}
-    .glow-title{font-size:clamp(2rem,6vw,3.6rem);line-height:1.05;margin:0 0 .2rem;text-shadow:var(--glow);text-align:center}
-    .subtitle{margin-top:.1rem;color:var(--muted);font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800;text-align:center}
-    .rotator{display:block;margin-top:.5rem;color:var(--brand-2);font-family:"Fira Code",monospace;font-size:clamp(1rem,2vw,1.1rem);min-height:1.4em;text-align:center;position:relative}
-    .rotator.swap-out{animation:rotOut .45s var(--ease) forwards}
-    .rotator.swap-in{animation:rotIn .45s var(--ease) forwards}
-    @keyframes rotOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(6px)}}
-    @keyframes rotIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+    .hero-grid{display:grid;grid-template-columns:1fr;align-items:center;gap:clamp(1rem,3vw,2rem);justify-items:center}
+    .hero-copy{order:1;text-align:center}
+    .hero-photo{order:4;width:100%;display:flex;justify-content:center}
+    @media (min-width:1000px){
+      .hero-grid{grid-template-columns:1.1fr 1fr;gap:clamp(1.2rem,4vw,3rem)}
+      .hero-copy{justify-self:start;text-align:left;order:1}
+      .hero-photo{justify-self:end;order:2;justify-content:flex-end}
+    }
 
-    .cta-row{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
-    .icon-link{--size:52px;width:var(--size);height:var(--size);display:grid;place-items:center;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));color:var(--text);text-decoration:none;transition:transform .18s, box-shadow .18s, border-color .18s, color .18s, background .18s}
-    .icon-link i{font-size:1.2rem}
-    .icon-link:hover{transform:translateY(-2px) scale(1.06);color:#0b1623;background:linear-gradient(180deg,var(--brand-2),var(--brand));border-color:transparent;box-shadow:0 10px 30px rgba(58,160,255,.45)}
+    .welcome{margin:.2rem 0 .4rem;text-align:center;font-weight:800;color:var(--brand-2);letter-spacing:.3px}
+    @media (min-width:1000px){ .welcome{text-align:left} }
 
-    /* Smaller portrait */
-    .portrait-wrap{position:relative;width:min(300px,75%);margin-inline:auto;border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);margin-top:1rem}
+    .glow-title{font-size:clamp(2rem,6vw,3.8rem);line-height:1.05;margin:0 0 .2rem;text-shadow:var(--glow)}
+    .subtitle{margin-top:.1rem;color:var(--muted);font-size:clamp(1.15rem,2.4vw,1.5rem);font-weight:800}
+
+    /* Portrait */
+    .portrait-wrap{position:relative;width:min(320px,85%);border-radius:20px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);margin-top:1rem;min-height:1px}
     .portrait-wrap img{width:100%;display:block;filter:contrast(1.02) saturate(1.05)}
     .scanline{position:absolute;inset:0;background:repeating-linear-gradient(to bottom, rgba(58,160,255,.08), rgba(58,160,255,.08) 2px, transparent 2px, transparent 4px);mix-blend-mode:soft-light;pointer-events:none;animation:scan 6s linear infinite}
     @keyframes scan{0%{background-position-y:0}100%{background-position-y:20px}}
-    @media (max-width:760px){.portrait-wrap{width:min(200px,85%)}}
+
+    /* Mobile portrait displayed between subtitle and rotator */
+    .portrait-mobile{display:none;justify-content:center}
+    @media (max-width:999px){
+      .hero-photo{display:none}
+      .portrait-mobile{display:flex}
+    }
+
+    /* Hero compact CTA row (social icons) */
+    .cta-row{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
+    @media (min-width:1000px){ .cta-row{justify-content:flex-start} }
+    .icon-link{--size:52px;width:var(--size);height:var(--size);display:grid;place-items:center;border-radius:14px;border:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));color:var(--text);text-decoration:none;transition:transform .18s, box-shadow .18s, border-color .18s, color .18s, background .18s}
+    .icon-link i{font-size:1.2rem}
+    .icon-link:hover{transform:translateY(-2px) scale(1.06);color:#0b1623;background:linear-gradient(180deg,var(--brand-2),var(--brand));border-color:transparent;box-shadow:0 10px 30px rgba(58,160,255,.45)}
+    .icon-link:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+
+    /* Email CTA under rotator */
+    .btn{
+      display:inline-flex;align-items:center;gap:.5rem;
+      padding:.55rem .9rem;border-radius:12px;border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,0));
+      color:var(--text);text-decoration:none;font-weight:700;
+      transition:transform .18s, box-shadow .18s, border-color .18s, background .18s;
+      margin-top:.75rem;
+    }
+    .btn:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 10px 30px rgba(58,160,255,.25)}
+    .btn:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
+
+    .rotator{display:block;margin-top:.5rem;color:var(--brand-2);font-family:"Fira Code",monospace;font-size:clamp(1rem,2vw,1.1rem);min-height:1.4em;position:relative}
 
     /* Cards (global) */
     .card,.exp-card,.project-card,.skill-card{
@@ -123,14 +182,46 @@
       border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);
       transition:transform .18s, box-shadow .18s, border-color .18s
     }
-    .card:hover,.exp-card:hover,.project-card:hover,.skill-card:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
+    .card:hover,.exp-card:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
+    .project-card:hover,.skill-card:hover{transform:none;border-color:var(--border);box-shadow:var(--shadow)}
 
-    /* About (accordion) */
+    /* Clickable summary affordance (arrow only) */
+    details > summary{position:relative;padding-right:2.75rem;list-style:none;cursor:pointer}
+    details > summary::-webkit-details-marker{display:none}
+    .summary-affordance{
+      position:absolute;right:.75rem;top:50%;transform:translateY(-50%);
+      display:inline-flex;align-items:center;gap:.3rem;color:var(--muted);
+      /* keep container small; we size the arrow itself below */
+      font-size:.8rem;
+    }
+    .summary-affordance .chev{
+      display:inline-block;transform:rotate(-90deg);transition:transform .2s var(--ease);
+      font-size:1rem; /* base size for all */
+      line-height:1;
+    }
+    /* Slightly bigger arrows on wider screens */
+    @media (min-width:1000px){
+      .summary-affordance .chev{font-size:1.2rem}
+    }
+    details[open] .summary-affordance .chev{transform:rotate(0deg)}
+    details > summary:focus-visible{outline:2px solid var(--brand);outline-offset:4px}
+
+    /* Dropdown animation wrapper */
+    .collapsible{
+      overflow:hidden;
+      max-height:0;
+      transition:max-height .38s var(--ease), opacity .38s var(--ease);
+      opacity:0;
+    }
+    details[open] > .collapsible,
+    details[open] .collapsible{
+      opacity:1;
+    }
+
+    /* About */
     .about-grid{display:grid;gap:.9rem;grid-template-columns:1fr}
     .about-acc details{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-    .about-acc summary{cursor:pointer;padding:1rem 1.1rem;font-weight:700;list-style:none;text-align:center}
-    .about-acc summary::-webkit-details-marker{display:none}
-    .about-acc details:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
+    .about-acc summary{padding:1rem 1.1rem;font-weight:700;text-align:center}
     .about-acc .about-body{padding:0 1.1rem 1.1rem 1.1rem;color:#d9e6ff;text-align:center}
 
     /* Education */
@@ -145,11 +236,9 @@
       width:100%;max-width:520px;margin-inline:auto;transition:none
     }
     .edu-item .edu-icon{font-size:1.25rem;margin-bottom:.35rem}
-    .edu-item h4{margin:.1rem 0 .2rem;line-height:1.25;text-align:center}
     .edu-item p{margin:.08rem 0;text-align:center}
-    .program-link{margin-top:.2rem;display:block;color:var(--brand-2);text-decoration:none;text-align:center}
+    .program-link{margin-top:.2rem;display:block;color:var(--brand-2);text-decoration:none}
     .program-link:hover{text-decoration:underline}
-    .certs-card{padding:1rem;text-align:center}
     .certs{display:grid;gap:.6rem;justify-items:center}
     .cert{
       display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:.6rem;border:1px solid var(--border);border-radius:12px;
@@ -161,31 +250,15 @@
     .cert a:hover{text-decoration:underline}
     .cert-issuer{font-size:.85rem;color:var(--muted);margin-bottom:2px}
 
-    /* Mobile: stack College then Certifications; widen content */
     @media (max-width:860px){
       .edu-grid{grid-template-columns:1fr}
       .edu-item,.cert{max-width:100%}
     }
 
-    /* Remove hover animation on Education cards/items */
-    #education .edu-card,
-    #education .certs-card,
-    #education .edu-item,
-    #education .cert{transition:none !important}
-    #education .edu-card:hover,
-    #education .certs-card:hover,
-    #education .edu-item:hover,
-    #education .cert:hover{
-      transform:none !important;
-      border-color:var(--border) !important;
-      box-shadow:var(--shadow) !important;
-    }
-
     /* Experience */
     .timeline{display:grid;gap:.9rem}
     .exp-card{border-radius:var(--radius);overflow:hidden}
-    .exp-card>summary{list-style:none;display:flex;flex-direction:column;align-items:center;gap:.6rem;cursor:pointer;padding:.9rem 1rem;justify-content:center;text-align:center}
-    .exp-card>summary::-webkit-details-marker{display:none}
+    .exp-card>summary{display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:.9rem 1rem;justify-content:center;text-align:center}
     .company-logo{width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border)}
     .exp-head{display:flex;flex-direction:column;align-items:center;text-align:center}
     .exp-head h3{margin:0;font-size:1.05rem}
@@ -196,15 +269,15 @@
     .x-tags{display:flex;gap:.35rem;margin:.25rem 0 0 0;justify-content:center}
     .x-tags .pill{font-size:.75rem;padding:.22rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
 
-    /* Earlier Career (consistent cards) */
+    /* Earlier Career (cards) */
     .inner-exp{border:1px solid var(--border);border-radius:12px;margin:.6rem 0;overflow:hidden}
-    .inner-exp summary{padding:.9rem 1rem;cursor:pointer;list-style:none;display:flex;flex-direction:column;align-items:center;gap:.2rem;text-align:center}
-    .inner-exp summary::-webkit-details-marker{display:none}
-    .inner-exp:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.35);box-shadow:0 14px 40px rgba(58,160,255,.18)}
-    .inner-exp .exp-title{text-align:center;margin-top:2px}
-    .inner-exp .exp-dates{color:var(--muted);font-size:.92rem; margin-top:.15rem}
+    .inner-exp summary{padding:.9rem 1rem;text-align:center;position:relative;padding-right:2.75rem;list-style:none}
+    .inner-exp .exp-title{margin-top:2px}
+    .inner-exp .exp-dates{color:var(--muted);font-size:.92rem;margin-top:.15rem}
     .inner-exp .inner-body{padding:0 .9rem .8rem .9rem;text-align:left}
-    .key-callout{display:flex;align-items:flex-start;gap:.5rem;margin-top:.5rem;padding:.6rem .75rem;border:1px dashed var(--brand);border-radius:12px;background:linear-gradient(180deg,rgba(58,160,255,.08),rgba(255,255,255,0))}
+
+    /* Key accomplishments callout */
+    .key-callout{display:flex;align-items:flex-start;gap:.5rem;margin-top:.6rem;padding:.7rem .8rem;border:1px dashed var(--brand);border-radius:12px;background:linear-gradient(180deg,rgba(58,160,255,.08),rgba(255,255,255,0))}
     .key-callout i{color:var(--brand);margin-top:3px}
 
     /* Projects */
@@ -227,25 +300,35 @@
     .section-reveal.revealed{opacity:1;transform:translateY(0)}
     body.link-fade{transition:opacity .3s;opacity:.96}
 
-    /* Tighten date spacing under titles inside exp-body content */
-    .exp-body h4{margin:.2rem 0 0}
-    .exp-body .exp-dates{margin-top:.1rem}
-
     /* Footer */
     .site-footer{border-top:1px solid var(--border);background:var(--footer-bg)}
     .footer-inner{padding:1rem 0;text-align:center;color:var(--muted)}
+    .last-updated{display:block;font-size:.85rem;margin-top:.25rem;color:#8aa2c6}
+
+    /* Responsive tweaks for hero order and centering */
+    .hero-copy .cta-row{order:3}
+    .hero-photo{order:5}
+    @media (min-width:1000px){
+      .hero-copy .cta-row{order:initial}
+      .hero-photo{order:2}
+    }
 
     /* Responsive */
     @media (max-width:980px){
-      .nav{display:none}.hamburger{display:flex}
+      nav[aria-label="Primary"]{display:none}.hamburger{display:flex}
       .projects-grid{grid-template-columns:1fr 1fr}
     }
     @media (max-width:700px){
       .projects-grid{grid-template-columns:1fr}
     }
+
+    /* Unify link styling */
+    .btn:link,.btn:visited{color:var(--text);text-decoration:none}
+    .icon-link:link,.icon-link:visited{color:var(--text);text-decoration:none}
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#home">Skip to content</a>
   <div class="noise" aria-hidden="true"></div>
   <div class="progress" id="progress"></div>
 
@@ -256,14 +339,14 @@
         <img src="assets/JP.PNG" alt="Portrait of Jonathan Pedrero" class="brand-avatar" />
         <span class="brand-text" id="brandText">JP</span>
       </a>
-      <nav class="nav" id="nav">
+      <nav class="nav" id="nav" aria-label="Primary">
         <a href="#home" class="nav-link">Home</a>
         <a href="#about" class="nav-link">About</a>
         <a href="#education" class="nav-link">Education</a>
         <a href="#experience" class="nav-link">Experience</a>
         <a href="#projects" class="nav-link">Projects</a>
         <a href="#skills" class="nav-link">Skills</a>
-        <a href="#contact" class="nav-link">Contact</a>
+        <a href="#contact" class="nav-link">Connect</a>
         <span class="nav-underline" id="navUnderline"></span>
       </nav>
       <button id="hamburger" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
@@ -275,442 +358,484 @@
       <a href="#experience" class="drawer-link">Experience</a>
       <a href="#projects" class="drawer-link">Projects</a>
       <a href="#skills" class="drawer-link">Skills</a>
-      <a href="#contact" class="drawer-link">Contact</a>
+      <a href="#contact" class="drawer-link">Connect</a>
     </div>
   </header>
 
   <!-- Floating button (Back to Top only) -->
-  <button id="toTop" class="fab hide page-enter delay-2" title="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
+  <button id="toTop" class="fab hide page-enter delay-2" title="Back to top" aria-label="Back to top"><i class="fa-solid fa-arrow-up"></i></button>
 
-  <!-- Home -->
-  <section id="home" class="section hero section-reveal page-enter delay-1">
-    <div class="container hero-grid">
-      <div class="hero-left page-enter delay-2">
-        <h1 class="glow-title page-enter delay-2">Jonathan Pedrero</h1>
-        <p class="subtitle page-enter delay-3">IT Operations Professional</p>
-
-        <div class="portrait-wrap page-enter delay-4">
-          <img src="assets/JP.PNG" alt="Portrait of Jonathan Pedrero" />
-          <div class="scanline"></div>
+  <main id="main">
+    <!-- Home -->
+    <section id="home" class="section hero section-reveal page-enter delay-1">
+      <div class="container hero-grid">
+        <!-- Desktop portrait -->
+        <div class="hero-photo page-enter delay-2">
+          <div class="portrait-wrap">
+            <img src="assets/JP2.PNG" alt="Portrait of Jonathan Pedrero" />
+            <div class="scanline"></div>
+          </div>
         </div>
 
-        <span class="rotator page-enter delay-5" id="rotator">Technology Enthusiast</span>
+        <!-- Text & Mobile portrait -->
+        <div class="hero-copy page-enter delay-2">
+          <p class="welcome page-enter delay-1">Welcome to my portfolio page!</p>
+          <h1 class="glow-title page-enter delay-2">Jonathan Pedrero</h1>
+          <p class="subtitle page-enter delay-3">IT Operations Professional</p>
 
-        <div class="cta-row page-enter delay-5">
-          <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
-          <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-          <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <!-- Mobile-only portrait between subtitle and rotating text -->
+          <div class="portrait-mobile">
+            <div class="portrait-wrap" style="margin:10px auto 0;">
+              <img src="assets/JP2.PNG" alt="Portrait of Jonathan Pedrero" />
+              <div class="scanline"></div>
+            </div>
+          </div>
+
+          <span class="rotator page-enter delay-4" id="rotator">Technology Enthusiast</span>
+
+          <!-- Email Me -->
+          <a class="btn page-enter delay-5" href="mailto:jp3drero@gmail.com" aria-label="Email Jonathan Pedrero">
+            <i class="fa-solid fa-envelope"></i> Email Me
+          </a>
+
+          <!-- Social icons -->
+          <div class="cta-row page-enter delay-5">
+            <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- About -->
-  <section id="about" class="section section-reveal page-enter delay-1">
-    <div class="container">
-      <h2 class="section-title">About</h2>
-      <p class="section-subtitle">Read about this webpage and who I am.</p>
-      <div class="about-grid about-acc">
-        <details class="card">
-          <summary>This Website</summary>
-          <div class="about-body">
-            <p>Welcome to my portfolio! I built this space to be a clear, living snapshot of my work and how I think. A site like this carries more context than a PDF resume: it shows personality, provides room for detail, and evolves with new experience. It’s also a place to share projects and the tools I use every day.</p>
-            <p>Under the hood it’s simple: HTML and CSS with a touch of JavaScript for tasteful animations and accessibility, hosted on GitHub Pages. The goal is clean, fast, and easy to maintain, so the content does the talking.</p>
-          </div>
-        </details>
-
-        <details class="card">
-          <summary>Me (Professional)</summary>
-          <div class="about-body">
-            <p><strong>In a sentence:</strong> I’m a technology enthusiast, problem solver, and people-first IT professional with over six years of hands-on experience focused on IT operations, infrastructure, and process improvement.</p>
-            <p>My passion for technology started back in high school. My dad ran a small PC repair business fixing everything from hardware failures to data recovery and software troubleshooting. But what left the biggest impression wasn’t just what he knew, it was how persistent he was. He could spend hours or days chasing down a problem, and the moment he found the fix? Pure joy.</p>
-            <p>That passion for discovering solutions inspired my own path: a career where I could solve real problems, support others, and keep systems running efficiently, both operationally and systematically.</p>
-            <p>I earned two Associate degrees from Volunteer State Community College and hold multiple IT certifications. As college came to a close, I landed my first internship as an IT Field Engineer. Since then, I’ve gained experience in a wide range of environments, from a corporate IT Service Desk to two startups in infrastructure and engineering. Today, I serve as a Senior IT Systems Administrator at one of the world’s leading cybersecurity companies.</p>
-          </div>
-        </details>
-
-        <details class="card">
-          <summary>Me (Personal)</summary>
-          <div class="about-body">
-            <p>Life isn’t just work; I have a few side quests too! I’m a big fan of sports, gaming, and travel.</p>
-            <p>I love baseball, basketball, and soccer. I generally support South Florida sports teams, and while living in Nashville I (try) to support our local teams too. One of my long-term goals is to visit all 30 Major League Baseball stadiums. So far, I’ve hit 15… which means I’ve still got a lot of miles (and hot dogs) to go.</p>
-            <p>When it comes to gaming, I was once a hardcore PC gamer. These days I stick to consoles. Sure, I miss the buttery-smooth frame rates, but I don’t miss the weekly and sometimes daily firmware, driver, and software updates. I want to boot up and play, not debug and wait.</p>
-            <p>Whether you’re here to talk tech or trade ballpark rankings, I’m just as happy to connect personally as I am professionally. You’ll find links to my social profiles right on the homepage!</p>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Education -->
-  <section id="education" class="section section-reveal page-enter delay-1">
-    <div class="container">
-      <h2 class="section-title">Education</h2>
-      <p class="section-subtitle">Academic degrees and professional certifications acquired.</p>
-      <div class="edu-grid">
-        <article class="card edu-card">
-          <h3>College</h3>
-          <div class="edu-items">
-            <div class="edu-item">
-              <div style="text-align:center">
-                <div class="edu-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
-                <p>Volunteer State Community College</p>
-                <p><strong>Computer Information Technology – Networking, AAS</strong></p>
-                <p>Class of 2022</p>
-                <a class="program-link" href="https://www.volstate.edu/academics/business-and-technology/cit/networking-courses" target="_blank" rel="noopener">Program page</a>
+    <!-- About -->
+    <section id="about" class="section section-reveal page-enter delay-1">
+      <div class="container">
+        <h2 class="section-title">About</h2>
+        <p class="section-subtitle">Read about this webpage and who I am.</p>
+        <div class="about-grid about-acc">
+          <details class="card">
+            <summary>
+              About This Website
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="about-body">
+                <p>Welcome to my portfolio! I built this space to be a clear, living snapshot of my work and how I think. A site like this carries more context than a PDF resume: it shows personality, provides room for detail, and evolves with new experience. It’s also a place to share projects and the tools I use every day. Under the hood it’s simple: HTML and CSS with a touch of JavaScript for tasteful animations and accessibility, hosted on GitHub Pages. The goal is clean, fast, and easy to maintain, so the content does the talking.</p>
               </div>
             </div>
-            <div class="edu-item">
-              <div style="text-align:center">
-                <div class="edu-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
-                <p>Volunteer State Community College</p>
-                <p><strong>University Parallel – General Studies, AS</strong></p>
-                <p>Class of 2020</p>
-                <a class="program-link" href="https://www.volstate.edu/humanities/general-studies/AS-courses" target="_blank" rel="noopener">Program page</a>
+          </details>
+
+          <details class="card">
+            <summary>
+              About My Professional Career
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="about-body">
+                <p>In a sentence: I’m a technology enthusiast, problem solver, and people-first IT professional with over six years of hands-on experience focused on IT operations, infrastructure, and process improvement. My passion for technology started back in high school. My dad ran a small PC repair business fixing everything from hardware failures to data recovery and software troubleshooting. But what left the biggest impression wasn’t just what he knew, it was how persistent he was. He could spend hours or days chasing down a problem, and the moment he found the fix? Pure joy. That passion for discovering solutions inspired my own path: a career where I could solve real problems, support others, and keep systems running efficiently, both operationally and systematically. I earned two Associate degrees from Volunteer State Community College and hold multiple IT certifications. As college came to a close, I landed my first internship as an IT Field Engineer. Since then, I’ve gained experience in a wide range of environments, from a corporate IT Service Desk to two startups in infrastructure and engineering. Today, I serve as a Senior IT Systems Administrator at one of the world’s leading cybersecurity companies.</p>
               </div>
             </div>
-          </div>
-        </article>
+          </details>
 
-        <article class="card certs-card">
-          <h3>Certifications</h3>
-          <div class="certs">
-            <div class="cert">
-              <i class="fa-solid fa-shield"></i>
-              <div>
-                <div class="cert-issuer">Okta</div>
-                <strong>Okta Certified Professional</strong><br/>
-                <span>Issued Jan 2025</span><br/>
-                <a href="https://www.credly.com/badges/95c0d6fd-fe0b-467e-b58a-11a79e4d7c99/public_url" target="_blank" rel="noopener">View credential</a>
+          <details class="card">
+            <summary>
+              About My Personal Life
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="about-body">
+                <p>Life isn’t just work; I have a few side quests too! I’m a big fan of sports, gaming, and travel. I love baseball, basketball, and soccer. I generally support South Florida sports teams, and while living in Nashville I (try) to support our local teams too. One of my long-term goals is to visit all 30 Major League Baseball stadiums. So far, I’ve hit 15… which means I’ve still got a lot of miles (and hot dogs) to go. When it comes to gaming, I was once a hardcore PC gamer. These days I stick to consoles. Sure, I miss the buttery-smooth frame rates, but I don’t miss the weekly and sometimes daily firmware, driver, and software updates. I want to boot up and play, not debug and wait. Whether you’re here to talk tech or trade ballpark rankings, I’m just as happy to connect personally as I am professionally. You’ll find links to my social profiles right on the homepage!</p>
               </div>
             </div>
-            <div class="cert">
-              <i class="fa-brands fa-apple"></i>
-              <div>
-                <div class="cert-issuer">Jamf</div>
-                <strong>Certified Associate (Jamf Pro)</strong><br/>
-                <span>Issued Oct 2024</span><br/>
-                <a href="https://www.credly.com/badges/72384c20-7a8c-4ac5-a652-0cd6eafb7a8c/public_url" target="_blank" rel="noopener">View credential</a>
-              </div>
-            </div>
-            <div class="cert">
-              <i class="fa-solid fa-computer"></i>
-              <div>
-                <div class="cert-issuer">CompTIA</div>
-                <strong>A+</strong><br/>
-                <span>Issued Jul 2023</span><br/>
-                <a href="https://www.credly.com/badges/c25c3a07-ab14-4a6f-9ec9-870f2a7437b4/public_url" target="_blank" rel="noopener">View credential</a>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Experience -->
-  <section id="experience" class="section section-reveal page-enter delay-1">
-    <div class="container">
-      <h2 class="section-title">Experience</h2>
-      <p class="section-subtitle">Work history related to Information Technology.</p>
-
-      <div class="timeline">
-        <!-- CrowdStrike -->
-        <details class="exp-card">
-          <summary>
-            <img src="assets/logos/crowdstrike.png" class="company-logo" alt="CrowdStrike logo placeholder" />
-            <div class="exp-head">
-              <h3>CrowdStrike</h3>
-              <div class="exp-title">Senior IT Systems Administrator</div>
-              <span class="exp-dates">Oct 2023 – Present</span>
-            </div>
-            <div class="x-tags">
-              <span class="pill">EDR</span><span class="pill">IAM</span><span class="pill">ITIL</span>
-              <span class="pill">Automation</span><span class="pill">Documentation</span>
-            </div>
-          </summary>
-          <div class="exp-body">
-            <p>Due to the public nature of this portfolio website and constant changes in my current role, a detailed job description is not listed here. If you’d like to learn more about my experience at CrowdStrike, contact me for an updated resume.</p>
-            <div class="key-callout"><i class="fa-solid fa-key"></i>
-              <div>
-                <strong>Key high-impact accomplishments:</strong>
-                <ul>
-                  <li>PM and technical lead for Simple Access Request Automation (SARA) self-service access automation with approvals, guardrails, and audit trail with over 2,000 automated requests a month.</li>
-                  <li>Team POC and lead for Problem Management and Major Incident Management, delivering improved incident and runbook processes and reduced MTTR.</li>
-                  <li>Delivery of global team's IT Service Desk Escalation process, standardizing L1 to L3 escalation with SLAs, handoff criteria, and templates.</li>
-                  <li>Developed a Slack app and Slack Workflow automations for IT support channels that recognize recurring questions and auto-reply with targeted knowledge-base articles and request forms, driving self-service and reducing duplicate tickets.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <!-- Bionic -->
-        <details class="exp-card">
-          <summary>
-            <img src="assets/logos/bionic.png" class="company-logo" alt="Bionic logo placeholder" />
-            <div class="exp-head">
-              <h3>Bionic</h3>
-              <div class="exp-title">IT Engineer</div>
-              <span class="exp-dates">May 2023 – Oct 2023</span>
-            </div>
-            <div class="x-tags">
-              <span class="pill">MDM</span><span class="pill">IAM</span><span class="pill">Networking</span>
-              <span class="pill">ZTNA</span><span class="pill">Cloudflare</span>
-            </div>
-          </summary>
-          <div class="exp-body">
-            <p>As the sole AMER IT Engineer at an APSM startup (later acquired by CrowdStrike), I owned frontline remote support while building internal IT operations and secure-by-default user experiences across a distributed workforce.</p>
-            <p>I managed endpoint deployment and patching (JumpCloud), DNS and VPN (Cloudflare), and first-response EDR operations (Falcon). I implemented SSO and SCIM integrations, enforced RBAC, and supported core apps including Notion, Atlassian, AWS, and Google Workspace, automating routine admin flows wherever possible.</p>
-            <div class="key-callout"><i class="fa-solid fa-key"></i>
-              <div>
-                <strong>Key high-impact accomplishments:</strong>
-                <ul>
-                  <li>Successful migration from AWS SSO (IAM Identity Center) to AWS IAM.</li>
-                  <li>Directory integration between JumpCloud and Microsoft 365.</li>
-                  <li>Standardization of CrowdStrike Falcon agent deployment across macOS and Windows.</li>
-                  <li>Deployed secure SOHO networks via Ubiquiti and Meraki for distributed teams in AMER region.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <!-- Built Technologies -->
-        <details class="exp-card">
-          <summary>
-            <img src="assets/logos/built.png" class="company-logo" alt="Built Technologies logo placeholder" />
-            <div class="exp-head">
-              <h3>Built Technologies</h3>
-              <div class="exp-title">IT Infrastructure Specialist & Desktop Support Technician II</div>
-              <span class="exp-dates">Dec 2021 – May 2023</span>
-            </div>
-            <div class="x-tags">
-              <span class="pill">MDM</span><span class="pill">IdP</span><span class="pill">Networking</span>
-              <span class="pill">Intune</span><span class="pill">Governance</span>
-            </div>
-          </summary>
-          <div class="exp-body">
-            <h4>IT Infrastructure Specialist</h4>
-            <div class="exp-dates">Nov 2022 – May 2023</div>
-            <p>Led infrastructure-focused support and systems administration in a hybrid environment. Managed JumpCloud and Kandji, zero-touch deployment for macOS and Windows, and improved the out-of-box experience. Administered identity and access via JumpCloud IdP and owned key enterprise apps including Google Workspace, Slack, Zoom, Atlassian, Malwarebytes, Tenable, Automox, 1Password, and Perimeter 81.</p>
-
-            <h4>Desktop Support Technician II</h4>
-            <div class="exp-dates">Dec 2021 – Nov 2022</div>
-            <p>Delivered in-person and remote support for a distributed workforce. Ran Jira Service Management and Confluence, and handled the lifecycle of devices and software assets, including procurement, vendor coordination, imaging, deployment, and shipping logistics. Drove onboarding and assisted security teams with alert triage and endpoint policy enforcement.</p>
-
-            <div class="key-callout"><i class="fa-solid fa-key"></i>
-              <div>
-                <strong>Key high-impact accomplishments:</strong>
-                <ul>
-                  <li>Windows fleet migration from JumpCloud MDM to Microsoft Intune.</li>
-                  <li>Google Groups and shared mailbox governance program.</li>
-                  <li>Network migration from Meraki to Ubiquiti supporting several hundred devices.</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <!-- Earlier Career -->
-        <details class="exp-card">
-          <summary>
-            <img src="assets/logos/early.png" class="company-logo" alt="Earlier career logo placeholder" />
-            <div class="exp-head">
-              <h3>Earlier Career · IT Support</h3>
-              <div class="exp-title">Contract / Part-time / Internship</div>
-              <span class="exp-dates">May 2019 – Dec 2021</span>
-            </div>
-            <div class="x-tags"><span class="pill">Support</span><span class="pill">Onboarding</span></div>
-          </summary>
-          <div class="exp-body">
-            <details class="inner-exp">
-              <summary>
-                <div><strong>CereCore</strong><div class="exp-title">IT Service Desk Analyst (Contract)</div></div>
-                <span class="exp-dates">May 2021 – Dec 2021</span>
-              </summary>
-              <div class="inner-body">
-                <p>Provided frontline IT support to HealthTrust (HCA Healthcare). Served as the primary point for device imaging, provisioning, shipping and onboarding for 10–20 new hires weekly. Troubleshot across Microsoft 365, SCCM, AirWatch and ServiceNow, with hands-on experience in HP & Dell hardware.</p>
-                <div class="key-callout"><i class="fa-solid fa-key"></i><div><strong>Key high-impact accomplishments:</strong> Streamlined the IT onboarding process, improving internal workflows and end-user experience.</div></div>
-              </div>
-            </details>
-            <details class="inner-exp">
-              <summary>
-                <div><strong>Kentucky Tennessee Conference</strong><div class="exp-title">IT Assistant (Part-time)</div></div>
-                <span class="exp-dates">Oct 2019 – Dec 2020</span>
-              </summary>
-              <div class="inner-body">
-                <p>Supported the organization’s IT Director on a range of initiatives, including AV system deployments for events and end-user support focused on Microsoft 365 applications and services.</p>
-              </div>
-            </details>
-            <details class="inner-exp">
-              <summary>
-                <div><strong>Enable Resource Group</strong><div class="exp-title">IT Field Engineer (Intern)</div></div>
-                <span class="exp-dates">May 2019 – Aug 2019</span>
-              </summary>
-              <div class="inner-body">
-                <p>Supported deployment and management of Christ Presbyterian Academy’s Apple device ecosystem (macOS, iPadOS, iOS) using Jamf Pro and Apple Configurator. Assisted with classroom and lab technology provisioning.</p>
-              </div>
-            </details>
-          </div>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects -->
-  <section id="projects" class="section section-reveal page-enter delay-1">
-    <div class="container">
-      <h2 class="section-title">Projects</h2>
-      <p class="section-subtitle">Major projects led or completed in my professional career.</p>
-      <div class="projects-grid">
-        <article class="project-card">
-          <h3>Simple Access Request Automation (SARA)</h3>
-          <p>PM and technical lead for an internal platform that automates self-service access across environments and entitlement services. Built approval flows, guardrails and audit trails to reduce turnaround and access risk.</p>
-          <ul class="tags"><li>IAM</li><li>Automation</li><li>Approvals</li><li>Audit</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>CrowdStrike Falcon Standardization</h3>
-          <p>Unified EDR sensor deployment and health checks for macOS and Windows with policy tiers and playbooks. Reduced false positives and improved response speed.</p>
-          <ul class="tags"><li>EDR</li><li>macOS</li><li>Windows</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>AWS SSO to IAM Migration</h3>
-          <p>Migrated from IAM Identity Center to IAM roles and policies. Implemented least-privilege roles and automated provisioning to cut manual access work.</p>
-          <ul class="tags"><li>AWS</li><li>IAM</li><li>Automation</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>Microsoft Intune Migration</h3>
-          <p>Moved Windows fleet management to Intune from JumpCloud MDM. Established compliance, baseline hardening and reporting for device visibility.</p>
-          <ul class="tags"><li>Intune</li><li>MDM</li><li>Windows</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>JumpCloud & Microsoft 365 Directory Integration</h3>
-          <p>Implemented SSO and SCIM with RBAC standards. Enforced MFA, conditional access and joiner-mover-leaver automation to limit access drift.</p>
-          <ul class="tags"><li>IdP</li><li>SSO</li><li>SCIM</li><li>RBAC</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>Problem & Major Incident Management Enhancements</h3>
-          <p>Drove improvements to problem analysis, ITIL v4-aligned processes and major incident runbooks and communications, leading to lower MTTR and a better administrative experience.</p>
-          <ul class="tags"><li>ITIL</li><li>Incident Response</li><li>Runbooks</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>IT Service Desk Escalation Policy Development</h3>
-          <p>Standardized L1 to L3 escalation with SLAs, handoff criteria and templates. Increased ownership clarity and reduced ticket reopens.</p>
-          <ul class="tags"><li>ITIL</li><li>SLA</li><li>Runbooks</li></ul>
-        </article>
-        <!-- New projects -->
-        <article class="project-card">
-          <h3>Network Migration: Meraki → Ubiquiti</h3>
-          <p>Planned and executed multi-site migration from Cisco Meraki to Ubiquiti, including switch/AP replacements, VLAN design, and monitoring. Improved performance and reduced licensing costs.</p>
-          <ul class="tags"><li>Networking</li><li>Ubiquiti</li><li>Meraki</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>Google Groups Governance Program</h3>
-          <p>Established naming standards, access policies, lifecycle rules, and request/approval workflows for Google Groups and shared mailboxes to reduce sprawl and access risk.</p>
-          <ul class="tags"><li>Governance</li><li>Google Workspace</li><li>RBAC</li></ul>
-        </article>
-        <article class="project-card">
-          <h3>Slack App & Workflow Automations</h3>
-          <p>Leveraged Slack app and workflow features to respond to recurring IT questions and auto-reply with tailored knowledge-base articles and request forms, guiding users to self-serve and reducing duplicate tickets.</p>
-          <ul class="tags"><li>Slack</li><li>Automation</li><li>Workflows</li></ul>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Skills -->
-  <section id="skills" class="section section-reveal page-enter delay-1">
-    <div class="container">
-      <h2 class="section-title">Skills & Applications</h2>
-      <p class="skills-note">Technical service administrator and / or power user of listed applications.</p>
-
-      <div class="skill-section">
-        <h3>EDR / Security Operations</h3>
-        <div class="skills-grid">
-          <a class="skill-card" href="https://www.crowdstrike.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield-halved"></i><span>CrowdStrike Falcon</span></a>
-          <a class="skill-card" href="https://www.tenable.com/" target="_blank" rel="noopener"><i class="fa-solid fa-bugs"></i><span>Tenable</span></a>
-          <a class="skill-card" href="https://www.malwarebytes.com/" target="_blank" rel="noopener"><i class="fa-solid fa-virus-covid"></i><span>Malwarebytes</span></a>
-          <a class="skill-card" href="https://www.automox.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield"></i><span>Automox</span></a>
+          </details>
         </div>
       </div>
+    </section>
 
-      <div class="skill-section">
-        <h3>MDM / Device Management</h3>
-        <div class="skills-grid">
-          <a class="skill-card" href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener"><i class="fa-solid fa-tablet-screen-button"></i><span>Microsoft Intune</span></a>
-          <a class="skill-card" href="https://jumpcloud.com/" target="_blank" rel="noopener"><i class="fa-solid fa-id-card-clip"></i><span>JumpCloud</span></a>
-          <a class="skill-card" href="https://www.kandji.io/" target="_blank" rel="noopener"><i class="fa-solid fa-mobile-screen"></i><span>Kandji</span></a>
-          <a class="skill-card" href="https://www.jamf.com/products/jamf-pro/" target="_blank" rel="noopener"><i class="fa-brands fa-apple"></i><span>Jamf Pro</span></a>
-          <a class="skill-card" href="https://support.apple.com/apple-configurator" target="_blank" rel="noopener"><i class="fa-solid fa-screwdriver-wrench"></i><span>Apple Configurator</span></a>
-          <a class="skill-card" href="https://www.vmware.com/products/workspace-one.html" target="_blank" rel="noopener"><i class="fa-solid fa-mobile"></i><span>AirWatch / WS1</span></a>
+    <!-- Education -->
+    <section id="education" class="section section-reveal page-enter delay-1">
+      <div class="container">
+        <h2 class="section-title">Education</h2>
+        <p class="section-subtitle">Academic degrees and professional certifications acquired.</p>
+        <div class="edu-grid">
+          <article class="card edu-card">
+            <h3>College</h3>
+            <div class="edu-items">
+              <div class="edu-item">
+                <div style="text-align:center">
+                  <div class="edu-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                  <p>Volunteer State Community College</p>
+                  <p><strong>Computer Information Technology – Networking, AAS</strong></p>
+                  <p>Class of 2022</p>
+                  <a class="program-link" href="https://www.volstate.edu/academics/business-and-technology/cit/networking-courses" target="_blank" rel="noopener">Program page</a>
+                </div>
+              </div>
+              <div class="edu-item">
+                <div style="text-align:center">
+                  <div class="edu-icon"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i></div>
+                  <p>Volunteer State Community College</p>
+                  <p><strong>University Parallel – General Studies, AS</strong></p>
+                  <p>Class of 2020</p>
+                  <a class="program-link" href="https://www.volstate.edu/humanities/general-studies/AS-courses" target="_blank" rel="noopener">Program page</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card certs-card">
+            <h3>Certifications</h3>
+            <div class="certs">
+              <div class="cert">
+                <i class="fa-solid fa-shield"></i>
+                <div>
+                  <div class="cert-issuer">Okta</div>
+                  <strong>Okta Certified Professional</strong><br/>
+                  <span>Issued Jan 2025</span><br/>
+                  <a href="https://www.credly.com/badges/95c0d6fd-fe0b-467e-b58a-11a79e4d7c99/public_url" target="_blank" rel="noopener">View credential</a>
+                </div>
+              </div>
+              <div class="cert">
+                <i class="fa-brands fa-apple"></i>
+                <div>
+                  <div class="cert-issuer">Jamf</div>
+                  <strong>Certified Associate (Jamf Pro)</strong><br/>
+                  <span>Issued Oct 2024</span><br/>
+                  <a href="https://www.credly.com/badges/72384c20-7a8c-4ac5-a652-0cd6eafb7a8c/public_url" target="_blank" rel="noopener">View credential</a>
+                </div>
+              </div>
+              <div class="cert">
+                <i class="fa-solid fa-computer"></i>
+                <div>
+                  <div class="cert-issuer">CompTIA</div>
+                  <strong>A+</strong><br/>
+                  <span>Issued Jul 2023</span><br/>
+                  <a href="https://www.credly.com/badges/c25c3a07-ab14-4a6f-9ec9-870f2a7437b4/public_url" target="_blank" rel="noopener">View credential</a>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
+    </section>
 
-      <div class="skill-section">
-        <h3>IAM / Identity</h3>
-        <div class="skills-grid">
-          <a class="skill-card" href="https://azure.microsoft.com/products/active-directory/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>Azure AD / Entra</span></a>
-          <a class="skill-card" href="https://www.okta.com/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>Okta</span></a>
-          <a class="skill-card" href="https://www.perimeter81.com/" target="_blank" rel="noopener"><i class="fa-solid fa-route"></i><span>Perimeter 81</span></a>
-          <a class="skill-card" href="https://ldap.com/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>LDAP / RADIUS</span></a>
-          <a class="skill-card" href="https://oauth.net/" target="_blank" rel="noopener"><i class="fa-solid fa-fingerprint"></i><span>SAML / OAuth / OIDC</span></a>
+    <!-- Experience -->
+    <section id="experience" class="section section-reveal page-enter delay-1">
+      <div class="container">
+        <h2 class="section-title">Experience</h2>
+        <p class="section-subtitle">Work history related to Information Technology.</p>
+
+        <div class="timeline">
+          <!-- CrowdStrike -->
+          <details class="exp-card">
+            <summary>
+              <img src="assets/logos/crowdstrike.png" class="company-logo" alt="CrowdStrike logo" loading="lazy" />
+              <div class="exp-head">
+                <h3>CrowdStrike</h3>
+                <div class="exp-title">Senior IT Systems Administrator</div>
+                <span class="exp-dates">Oct 2023 – Present</span>
+              </div>
+              <div class="x-tags">
+                <span class="pill">EDR</span><span class="pill">IAM</span><span class="pill">ITIL</span>
+                <span class="pill">Automation</span><span class="pill">Documentation</span>
+              </div>
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="exp-body">
+                <p><strong>Summary:</strong> Senior administrator driving global IT operations and service reliability. I lead access automation at scale (2k+ monthly SARA requests), improve problem/major-incident processes to cut MTTR, and standardize escalation and support workflows across identity lifecycle, endpoint health, and integrations.</p>
+                <div class="key-callout"><i class="fa-solid fa-key"></i>
+                  <div>
+                    <strong>Key high-impact accomplishments:</strong>
+                    <ul>
+                      <li>PM & technical lead for SARA with approvals, guardrails, and audit trail; 2,000+ automated requests/month.</li>
+                      <li>Lead for Problem & Major Incident Management; improved runbooks/communications and reduced MTTR.</li>
+                      <li>Delivered global IT Service Desk Escalation process with SLAs, handoff criteria, and templates.</li>
+                      <li>Built Slack app & Workflow automations to detect recurring IT questions and auto-reply with targeted KB articles and request forms, enabling self-service and reducing duplicate tickets.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Bionic -->
+          <details class="exp-card">
+            <summary>
+              <img src="assets/logos/bionic.png" class="company-logo" alt="Bionic logo" loading="lazy" />
+              <div class="exp-head">
+                <h3>Bionic</h3>
+                <div class="exp-title">IT Engineer</div>
+                <span class="exp-dates">May 2023 – Oct 2023</span>
+              </div>
+              <div class="x-tags">
+                <span class="pill">MDM</span><span class="pill">IAM</span><span class="pill">Networking</span>
+                <span class="pill">ZTNA</span><span class="pill">Cloudflare</span>
+              </div>
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="exp-body">
+                <p><strong>Summary:</strong> First AMER IT hire at an APSM startup (acquired by CrowdStrike) owning frontline support and secure-by-default operations. Implemented SSO/SCIM, standardized endpoint deployment/patching, and delivered ZTNA and network baselines with a strong automation focus.</p>
+                <div class="key-callout"><i class="fa-solid fa-key"></i>
+                  <div>
+                    <strong>Key high-impact accomplishments:</strong>
+                    <ul>
+                      <li>Migrated from AWS SSO (IAM Identity Center) to AWS IAM with least-privilege roles.</li>
+                      <li>Directory integration between JumpCloud and Microsoft 365.</li>
+                      <li>Standardized CrowdStrike Falcon agent deployment across macOS and Windows.</li>
+                      <li>Deployed secure SOHO networks via Ubiquiti and Meraki for distributed AMER teams.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Built Technologies -->
+          <details class="exp-card">
+            <summary>
+              <img src="assets/logos/built.png" class="company-logo" alt="Built Technologies logo" loading="lazy" />
+              <div class="exp-head">
+                <h3>Built Technologies</h3>
+                <div class="exp-title">IT Infrastructure Specialist & Desktop Support Technician II</div>
+                <span class="exp-dates">Dec 2021 – May 2023</span>
+              </div>
+              <div class="x-tags">
+                <span class="pill">MDM</span><span class="pill">IdP</span><span class="pill">Networking</span>
+                <span class="pill">Intune</span><span class="pill">Governance</span>
+              </div>
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="exp-body">
+                <p><strong>Summary:</strong> Progressed from advanced support to infrastructure administration in a hybrid environment. Led Windows fleet migration to Intune, matured identity and Google Workspace governance, and improved zero-touch deployment and OOBE for macOS/Windows—driving compliance and reliable onboarding/offboarding at scale.</p>
+
+                <!-- No spacing block per request -->
+                <h4 style="margin:0">IT Infrastructure Specialist</h4>
+                <div class="exp-dates" style="margin:0">Nov 2022 – May 2023</div>
+                <p style="margin:.2rem 0 0">Managed JumpCloud & Kandji, zero-touch deployment, and identity/access for core apps (Google Workspace, Slack, Zoom, Atlassian, Malwarebytes, Tenable, Automox, 1Password, Perimeter 81).</p>
+
+                <h4 style="margin:.8rem 0 0">Desktop Support Technician II</h4>
+                <div class="exp-dates" style="margin:0">Dec 2021 – Nov 2022</div>
+                <p style="margin:.2rem 0 0">Delivered distributed support and device/software lifecycle. Operated Jira Service Management/Confluence; handled procurement, imaging, deployment, and shipping. Supported security teams with alert triage and endpoint policy enforcement.</p>
+
+                <div class="key-callout"><i class="fa-solid fa-key"></i>
+                  <div>
+                    <strong>Key high-impact accomplishments:</strong>
+                    <ul>
+                      <li>Windows fleet migration from JumpCloud MDM to Microsoft Intune.</li>
+                      <li>Google Groups and shared mailbox governance program.</li>
+                      <li>Network migration from Meraki to Ubiquiti supporting several hundred devices.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Earlier Career -->
+          <details class="exp-card">
+            <summary>
+              <img src="assets/logos/early.png" class="company-logo" alt="Earlier career logo" loading="lazy" />
+              <div class="exp-head">
+                <h3>Earlier Career · IT Support</h3>
+                <div class="exp-title">Contract / Part-time / Internship</div>
+                <span class="exp-dates">May 2019 – Dec 2021</span>
+              </div>
+              <div class="x-tags"><span class="pill">Support</span><span class="pill">Onboarding</span></div>
+              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+            </summary>
+            <div class="collapsible">
+              <div class="exp-body">
+                <details class="inner-exp">
+                  <summary>
+                    <div><strong>CereCore</strong><div class="exp-title">IT Service Desk Analyst (Contract)</div></div>
+                    <span class="exp-dates">May 2021 – Dec 2021</span>
+                    <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+                  </summary>
+                  <div class="collapsible">
+                    <div class="inner-body">
+                      <p><strong>Summary:</strong> Frontline support for HealthTrust (HCA Healthcare) with emphasis on onboarding volume and device readiness across Microsoft 365, SCCM, AirWatch, and ServiceNow.</p>
+                      <div class="key-callout"><i class="fa-solid fa-key"></i><div><strong>Impact:</strong> Streamlined onboarding, improving internal workflows and end-user experience.</div></div>
+                    </div>
+                  </div>
+                </details>
+                <details class="inner-exp">
+                  <summary>
+                    <div><strong>Kentucky Tennessee Conference</strong><div class="exp-title">IT Assistant (Part-time)</div></div>
+                    <span class="exp-dates">Oct 2019 – Dec 2020</span>
+                    <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+                  </summary>
+                  <div class="collapsible">
+                    <div class="inner-body">
+                      <p><strong>Summary:</strong> Supported IT Director on AV deployments and end-user support with a focus on Microsoft 365 services across events and office environments.</p>
+                    </div>
+                  </div>
+                </details>
+                <details class="inner-exp">
+                  <summary>
+                    <div><strong>Enable Resource Group</strong><div class="exp-title">IT Field Engineer (Intern)</div></div>
+                    <span class="exp-dates">May 2019 – Aug 2019</span>
+                    <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+                  </summary>
+                  <div class="collapsible">
+                    <div class="inner-body">
+                      <p><strong>Summary:</strong> Helped deploy and manage Apple device ecosystems (macOS, iPadOS, iOS) with Jamf Pro and Apple Configurator; assisted classroom and lab provisioning.</p>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
+    </section>
 
-      <div class="skill-section">
-        <h3>Networking</h3>
-        <div class="skills-grid">
-          <a class="skill-card" href="https://ui.com/" target="_blank" rel="noopener"><i class="fa-solid fa-network-wired"></i><span>Ubiquiti</span></a>
-          <a class="skill-card" href="https://meraki.cisco.com/" target="_blank" rel="noopener"><i class="fa-solid fa-network-wired"></i><span>Meraki</span></a>
+    <!-- Projects -->
+    <section id="projects" class="section section-reveal page-enter delay-1">
+      <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <p class="section-subtitle">Major projects led or completed in my professional career.</p>
+        <div class="projects-grid">
+          <article class="project-card">
+            <h3>Simple Access Request Automation (SARA)</h3>
+            <p>PM and technical lead for an internal platform that automates self-service access across environments and entitlement services. Built approval flows, guardrails and audit trails to reduce turnaround and access risk.</p>
+            <ul class="tags"><li>IAM</li><li>Automation</li><li>Approvals</li><li>Audit</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>CrowdStrike Falcon Standardization</h3>
+            <p>Unified EDR sensor deployment and health checks for macOS and Windows with policy tiers and playbooks. Reduced false positives and improved response speed.</p>
+            <ul class="tags"><li>EDR</li><li>macOS</li><li>Windows</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>AWS SSO to IAM Migration</h3>
+            <p>Migrated from IAM Identity Center to IAM roles and policies. Implemented least-privilege roles and automated provisioning to cut manual access work.</p>
+            <ul class="tags"><li>AWS</li><li>IAM</li><li>Automation</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>Microsoft Intune Migration</h3>
+            <p>Moved Windows fleet management to Intune from JumpCloud MDM. Established compliance, baseline hardening and reporting for device visibility.</p>
+            <ul class="tags"><li>Intune</li><li>MDM</li><li>Windows</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>JumpCloud & Microsoft 365 Directory Integration</h3>
+            <p>Implemented SSO and SCIM with RBAC standards. Enforced MFA, conditional access and joiner-mover-leaver automation to limit access drift.</p>
+            <ul class="tags"><li>IdP</li><li>SSO</li><li>SCIM</li><li>RBAC</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>Problem & Major Incident Management Enhancements</h3>
+            <p>Drove improvements to problem analysis, ITIL v4-aligned processes and major incident runbooks and communications, leading to lower MTTR and a better administrative experience.</p>
+            <ul class="tags"><li>ITIL</li><li>Incident Response</li><li>Runbooks</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>IT Service Desk Escalation Policy Development</h3>
+            <p>Standardized L1 to L3 escalation with SLAs, handoff criteria and templates. Increased ownership clarity and reduced ticket reopens.</p>
+            <ul class="tags"><li>ITIL</li><li>SLA</li><li>Runbooks</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>Network Migration: Meraki → Ubiquiti</h3>
+            <p>Planned and executed multi-site migration from Cisco Meraki to Ubiquiti, including switch/AP replacements, VLAN design, and monitoring. Improved performance and reduced licensing costs.</p>
+            <ul class="tags"><li>Networking</li><li>Ubiquiti</li><li>Meraki</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>Google Groups Governance Program</h3>
+            <p>Established naming standards, access policies, lifecycle rules, and request/approval workflows for Google Groups and shared mailboxes to reduce sprawl and access risk.</p>
+            <ul class="tags"><li>Governance</li><li>Google Workspace</li><li>RBAC</li></ul>
+          </article>
+          <article class="project-card">
+            <h3>Slack App & Workflow Automations</h3>
+            <p>Leveraged Slack app and workflow features to respond to recurring IT questions and auto-reply with tailored knowledge-base articles and request forms, guiding users to self-serve and reducing duplicate tickets.</p>
+            <ul class="tags"><li>Slack</li><li>Automation</li><li>Workflows</li></ul>
+          </article>
         </div>
       </div>
+    </section>
 
-      <div class="skill-section">
-        <h3>Cloud / Collaboration</h3>
-        <div class="skills-grid">
-          <a class="skill-card" href="https://aws.amazon.com/" target="_blank" rel="noopener"><i class="fa-solid fa-cloud"></i><span>AWS</span></a>
-          <a class="skill-card" href="https://workspace.google.com/" target="_blank" rel="noopener"><i class="devicon-google-plain"></i><span>Google Workspace</span></a>
-          <a class="skill-card" href="https://slack.com/" target="_blank" rel="noopener"><i class="devicon-slack-plain"></i><span>Slack</span></a>
-          <a class="skill-card" href="https://www.atlassian.com/" target="_blank" rel="noopener"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
-          <a class="skill-card" href="https://sendgrid.com/" target="_blank" rel="noopener"><i class="fa-regular fa-paper-plane"></i><span>SendGrid</span></a>
-          <a class="skill-card" href="https://1password.com/" target="_blank" rel="noopener"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
-          <a class="skill-card" href="https://learn.microsoft.com/mem/configmgr/" target="_blank" rel="noopener"><i class="fa-solid fa-server"></i><span>SCCM</span></a>
-          <a class="skill-card" href="https://www.servicenow.com/" target="_blank" rel="noopener"><i class="fa-solid fa-ticket"></i><span>ServiceNow</span></a>
-          <a class="skill-card" href="https://www.microsoft.com/microsoft-365" target="_blank" rel="noopener"><i class="fa-brands fa-microsoft"></i><span>Microsoft 365</span></a>
-          <a class="skill-card" href="https://learn.microsoft.com/exchange/" target="_blank" rel="noopener"><i class="fa-solid fa-envelopes-bulk"></i><span>Exchange</span></a>
+    <!-- Skills -->
+    <section id="skills" class="section section-reveal page-enter delay-1">
+      <div class="container">
+        <h2 class="section-title">Skills & Applications</h2>
+        <p class="skills-note">Technical service administrator and / or power user of listed applications.</p>
+
+        <div class="skill-section">
+          <h3>EDR / Security Operations</h3>
+          <div class="skills-grid">
+            <a class="skill-card" href="https://www.crowdstrike.com/" target="_blank" rel="noopener" aria-label="CrowdStrike Falcon"><i class="fa-solid fa-shield-halved"></i><span>CrowdStrike Falcon</span></a>
+            <a class="skill-card" href="https://www.tenable.com/" target="_blank" rel="noopener" aria-label="Tenable"><i class="fa-solid fa-bugs"></i><span>Tenable</span></a>
+            <a class="skill-card" href="https://www.malwarebytes.com/" target="_blank" rel="noopener" aria-label="Malwarebytes"><i class="fa-solid fa-virus-covid"></i><span>Malwarebytes</span></a>
+            <a class="skill-card" href="https://www.automox.com/" target="_blank" rel="noopener" aria-label="Automox"><i class="fa-solid fa-shield"></i><span>Automox</span></a>
+          </div>
+        </div>
+
+        <div class="skill-section">
+          <h3>MDM / Device Management</h3>
+          <div class="skills-grid">
+            <a class="skill-card" href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener" aria-label="Microsoft Intune"><i class="fa-solid fa-tablet-screen-button"></i><span>Microsoft Intune</span></a>
+            <a class="skill-card" href="https://jumpcloud.com/" target="_blank" rel="noopener" aria-label="JumpCloud"><i class="fa-solid fa-id-card-clip"></i><span>JumpCloud</span></a>
+            <a class="skill-card" href="https://www.kandji.io/" target="_blank" rel="noopener" aria-label="Kandji"><i class="fa-solid fa-mobile-screen"></i><span>Kandji</span></a>
+            <a class="skill-card" href="https://www.jamf.com/products/jamf-pro/" target="_blank" rel="noopener" aria-label="Jamf Pro"><i class="fa-brands fa-apple"></i><span>Jamf Pro</span></a>
+            <a class="skill-card" href="https://support.apple.com/apple-configurator" target="_blank" rel="noopener" aria-label="Apple Configurator"><i class="fa-solid fa-screwdriver-wrench"></i><span>Apple Configurator</span></a>
+            <a class="skill-card" href="https://www.vmware.com/products/workspace-one.html" target="_blank" rel="noopener" aria-label="AirWatch / Workspace ONE"><i class="fa-solid fa-mobile"></i><span>AirWatch / WS1</span></a>
+          </div>
+        </div>
+
+        <div class="skill-section">
+          <h3>IAM / Identity</h3>
+          <div class="skills-grid">
+            <a class="skill-card" href="https://azure.microsoft.com/products/active-directory/" target="_blank" rel="noopener" aria-label="Azure AD / Entra"><i class="fa-solid fa-user-lock"></i><span>Azure AD / Entra</span></a>
+            <a class="skill-card" href="https://www.okta.com/" target="_blank" rel="noopener" aria-label="Okta"><i class="fa-solid fa-user-lock"></i><span>Okta</span></a>
+            <a class="skill-card" href="https://www.perimeter81.com/" target="_blank" rel="noopener" aria-label="Perimeter 81"><i class="fa-solid fa-route"></i><span>Perimeter 81</span></a>
+            <a class="skill-card" href="https://ldap.com/" target="_blank" rel="noopener" aria-label="LDAP / RADIUS"><i class="fa-solid fa-user-lock"></i><span>LDAP / RADIUS</span></a>
+            <a class="skill-card" href="https://oauth.net/" target="_blank" rel="noopener" aria-label="SAML / OAuth / OIDC"><i class="fa-solid fa-fingerprint"></i><span>SAML / OAuth / OIDC</span></a>
+          </div>
+        </div>
+
+        <div class="skill-section">
+          <h3>Networking</h3>
+          <div class="skills-grid">
+            <a class="skill-card" href="https://ui.com/" target="_blank" rel="noopener" aria-label="Ubiquiti"><i class="fa-solid fa-network-wired"></i><span>Ubiquiti</span></a>
+            <a class="skill-card" href="https://meraki.cisco.com/" target="_blank" rel="noopener" aria-label="Meraki"><i class="fa-solid fa-network-wired"></i><span>Meraki</span></a>
+          </div>
+        </div>
+
+        <div class="skill-section">
+          <h3>Cloud / Collaboration</h3>
+          <div class="skills-grid">
+            <a class="skill-card" href="https://aws.amazon.com/" target="_blank" rel="noopener" aria-label="AWS"><i class="fa-solid fa-cloud"></i><span>AWS</span></a>
+            <a class="skill-card" href="https://workspace.google.com/" target="_blank" rel="noopener" aria-label="Google Workspace"><i class="devicon-google-plain"></i><span>Google Workspace</span></a>
+            <a class="skill-card" href="https://slack.com/" target="_blank" rel="noopener" aria-label="Slack"><i class="devicon-slack-plain"></i><span>Slack</span></a>
+            <a class="skill-card" href="https://www.atlassian.com/" target="_blank" rel="noopener" aria-label="Atlassian"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
+            <a class="skill-card" href="https://sendgrid.com/" target="_blank" rel="noopener" aria-label="SendGrid"><i class="fa-regular fa-paper-plane"></i><span>SendGrid</span></a>
+            <a class="skill-card" href="https://1password.com/" target="_blank" rel="noopener" aria-label="1Password"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
+            <a class="skill-card" href="https://learn.microsoft.com/mem/configmgr/" target="_blank" rel="noopener" aria-label="SCCM"><i class="fa-solid fa-server"></i><span>SCCM</span></a>
+            <a class="skill-card" href="https://www.servicenow.com/" target="_blank" rel="noopener" aria-label="ServiceNow"><i class="fa-solid fa-ticket"></i><span>ServiceNow</span></a>
+            <a class="skill-card" href="https://www.microsoft.com/microsoft-365" target="_blank" rel="noopener" aria-label="Microsoft 365"><i class="fa-brands fa-microsoft"></i><span>Microsoft 365</span></a>
+            <a class="skill-card" href="https://learn.microsoft.com/exchange/" target="_blank" rel="noopener" aria-label="Exchange"><i class="fa-solid fa-envelopes-bulk"></i><span>Exchange</span></a>
+          </div>
         </div>
       </div>
+    </section>
 
-      <div class="skill-section">
-        <h3>Project Management</h3>
-        <div class="skills-grid">
-          <a class="skill-card" href="https://www.atlassian.com/" target="_blank" rel="noopener"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
-          <a class="skill-card" href="https://asana.com/" target="_blank" rel="noopener"><i class="fa-solid fa-puzzle-piece"></i><span>Asana</span></a>
-          <a class="skill-card" href="#" onclick="return false;"><i class="fa-solid fa-table-columns"></i><span>Kanban</span></a>
-          <a class="skill-card" href="#" onclick="return false;"><i class="fa-solid fa-diagram-project"></i><span>Agile Methodology</span></a>
+    <!-- Connect -->
+    <section id="contact" class="section section-reveal page-enter delay-1">
+      <div class="container">
+        <h2 class="section-title">Connect</h2>
+        <div class="cta-row" style="justify-content:center;">
+          <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
         </div>
       </div>
-
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="section section-reveal page-enter delay-1">
-    <div class="container">
-      <h2 class="section-title">Contact Me</h2>
-      <div class="cta-row" style="justify-content:center;">
-        <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
-        <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-        <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <!-- Footer -->
   <footer class="site-footer page-enter delay-1">
     <div class="container footer-inner">
       <span>© 2025 Jonathan Pedrero — Built with HTML, CSS, JS, GitHub Pages, & Coffee.</span>
+      <small class="last-updated">Last updated: Oct 2025</small>
     </div>
   </footer>
 
@@ -792,7 +917,7 @@
       });
     });
 
-    // Rotating descriptors – smoother crossfade
+    // Rotating descriptors
     const rotator = document.getElementById('rotator');
     const phrases = ['Technology Enthusiast', 'Problem Solver', 'Senior Systems Administrator', 'Security Advocate'];
     let idx = 1;
@@ -833,8 +958,6 @@
             Object.values(navMap).forEach(n => n.classList.remove('active'));
             navMap[id].classList.add('active');
             moveUnderline(navMap[id]);
-
-            // Change header text: 'JP' on Home, 'Jonathan Pedrero' elsewhere
             brandText.textContent = (id === 'home') ? 'JP' : 'Jonathan Pedrero';
           }
         }
@@ -849,6 +972,38 @@
         moveUnderline(active);
       });
     });
+
+    /* Dropdown animation for all details (including nested) */
+    function setupDetailsAnimation(root=document){
+      const allDetails = root.querySelectorAll('details');
+      allDetails.forEach(d => {
+        const content = d.querySelector(':scope > .collapsible') || d.querySelector('.collapsible');
+        if (!content) return;
+
+        // Set initial max-height if open
+        if (d.hasAttribute('open')) {
+          content.style.maxHeight = 'none';
+          content.style.opacity = '1';
+        }
+
+        d.addEventListener('toggle', () => {
+          if (d.open){
+            content.style.maxHeight = content.scrollHeight + 'px';
+            content.style.opacity = '1';
+            content.addEventListener('transitionend', function te(e){
+              if (e.propertyName === 'max-height') content.style.maxHeight = 'none';
+              content.removeEventListener('transitionend', te);
+            });
+          } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            void content.offsetHeight;
+            content.style.maxHeight = '0px';
+            content.style.opacity = '0';
+          }
+        });
+      });
+    }
+    setupDetailsAnimation();
   </script>
 </body>
 </html>
