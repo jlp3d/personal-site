@@ -15,34 +15,7 @@ This is my personal portfolio website — a clean, animated showcase of my **car
 - **Navigation Highlighting** and dynamic underline tracking  
 - **Rotating Hero Text** for dynamic identity phrases  
 - **Interactive Cards** for Education, Experience, and Projects  
-- **Custom Domain** connected through Namecheap  
-
----
-
-## 🌐 Custom Domain (Namecheap → GitHub Pages)
-
-1. In Namecheap DNS settings:
-- Add **4 A Records** pointing to GitHub’s IPs:
-  ```
-  185.199.108.153
-  185.199.109.153
-  185.199.110.153
-  185.199.111.153
-  ```
-- Add a **CNAME** record:
-  ```
-  Type: CNAME
-  Host: www
-  Value: <your-username>.github.io
-  ```
-2. In your GitHub repo, go to:
-Settings → Pages → Custom Domain
-
-yaml
-Copy code
-and enter your domain (e.g. `www.jonathanpedrero.com`).
-3. GitHub will auto-create a `CNAME` file in the repo.
-4. Enable **Enforce HTTPS** after propagation.
+- **Custom Domain** connected through Namecheap 
 
 ---
 
@@ -52,6 +25,7 @@ and enter your domain (e.g. `www.jonathanpedrero.com`).
 - **Font Awesome** icons
 - **Google Fonts:** Inter & Fira Code
 - **GitHub Pages** for free hosting
+- **Namecheap** for domain
 
 ---
 
