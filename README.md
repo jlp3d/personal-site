@@ -2,7 +2,7 @@
 
 **Live Site:** [https://jonathanpedrero.com](https://jonathanpedrero.com)
 
-This is my personal portfolio website — a clean, animated showcase of my **career, projects, experience, and certifications** as an IT Operations Professional.
+This is my personal portfolio website — a clean, animated showcase of my **career, projects, experience, and certifications** as an Technology Operations Professional.
 
 ---
 
@@ -32,7 +32,7 @@ This is my personal portfolio website — a clean, animated showcase of my **car
 ## 👨‍💻 Author
 
 **Jonathan Pedrero**  
-💼 IT Operations Professional  
+💼 Technology Operations Professional  
 🌐 [LinkedIn](https://www.linkedin.com/in/jonathan-pedrero/)  
 📧 [jp3drero@gmail.com](mailto:jp3drero@gmail.com)
 
@@ -41,4 +41,4 @@ This is my personal portfolio website — a clean, animated showcase of my **car
 ## 📜 License
 
 This website is for personal and portfolio use only.  
-All rights reserved © 2025 Jonathan Pedrero.
+All rights reserved © 2026 Jonathan Pedrero.
