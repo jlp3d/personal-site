@@ -37,6 +37,11 @@
       --ease:cubic-bezier(.2,.6,.2,1);
       --scroll:0;
       --header-h:64px;
+      --bnav-h:68px;
+      --fs-eyebrow:.72rem;
+      --fs-title:clamp(1.75rem,3.4vw,2.4rem);
+      --fs-section-sub:.95rem;
+      --content-max:1100px;
     }
 
     *{box-sizing:border-box}
@@ -455,6 +460,190 @@
     .btn:link,.btn:visited{color:var(--text);text-decoration:none}
     .icon-link:link,.icon-link:visited{color:var(--text);text-decoration:none}
 
+    /* ======================================================================
+       REWORK LAYER — new visual hierarchy + mobile structural changes.
+       These rules intentionally override earlier patterns where overlap exists.
+       ====================================================================== */
+
+    /* Section heading pattern (eyebrow + title + subtitle) */
+    .section-head{max-width:var(--content-max);margin:0 auto 1.6rem;text-align:center}
+    .eyebrow{
+      display:inline-block;font-size:var(--fs-eyebrow);letter-spacing:.18em;
+      text-transform:uppercase;color:var(--brand-2);font-weight:700;
+      margin:0 0 .55rem;opacity:.9;
+    }
+    .eyebrow::before{content:"// "}
+    .section-head .section-title{font-size:var(--fs-title);margin:0;letter-spacing:.2px;line-height:1.15}
+    .section-head .section-subtitle{margin:.5rem 0 0;color:var(--muted);font-size:var(--fs-section-sub);text-align:center}
+    @media (min-width:860px){
+      .section-head{text-align:left}
+      .section-head .section-subtitle{text-align:left;max-width:640px}
+    }
+
+    /* Bottom tab bar (mobile primary nav) */
+    .bottom-nav{
+      position:fixed;left:0;right:0;bottom:0;z-index:75;
+      display:none;background:rgba(7,15,26,.82);
+      -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);
+      border-top:1px solid var(--border);
+      padding:6px max(6px,env(safe-area-inset-left)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-right));
+    }
+    @supports not (backdrop-filter: blur(1px)){ .bottom-nav{background:#070f1a} }
+    .bottom-nav-inner{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;max-width:560px;margin:0 auto}
+    .bnav-link{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+      min-height:56px;padding:.35rem .2rem;border-radius:12px;
+      color:var(--muted);text-decoration:none;font-size:.68rem;font-weight:700;letter-spacing:.05em;
+      transition:color .18s var(--ease), background .18s var(--ease), transform .15s var(--ease)
+    }
+    .bnav-link i{font-size:1.15rem;transition:transform .18s var(--ease)}
+    .bnav-link.active{color:var(--brand-2);background:rgba(58,160,255,.1)}
+    .bnav-link.active i{transform:translateY(-1px) scale(1.06)}
+    .bnav-link:active{transform:scale(.94)}
+    .bnav-link:focus-visible{outline-offset:2px}
+    @media (max-width:980px){
+      .bottom-nav{display:block}
+      body{padding-bottom:calc(var(--bnav-h) + env(safe-area-inset-bottom))}
+      /* Push the back-to-top FAB above the bottom nav on mobile */
+      #toTop{bottom:calc(var(--bnav-h) + 12px + env(safe-area-inset-bottom))}
+    }
+
+    /* Experience — horizontal role cards */
+    .roles{display:grid;gap:1rem;margin:0}
+    .role{
+      border:1px solid var(--border);border-radius:var(--radius);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      box-shadow:var(--shadow);
+      transition:transform .2s var(--ease), border-color .2s var(--ease), box-shadow .2s var(--ease), background .2s var(--ease);
+    }
+    .role:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.3);box-shadow:0 14px 34px rgba(58,160,255,.16)}
+    .role[open]{border-color:rgba(58,160,255,.4);box-shadow:0 14px 40px rgba(58,160,255,.2);background:linear-gradient(180deg,rgba(58,160,255,.05),rgba(255,255,255,0))}
+    .role > summary{
+      list-style:none;cursor:pointer;padding:1rem 1.1rem;
+      display:grid;align-items:center;gap:.9rem 1rem;
+      grid-template-columns:52px 1fr auto 24px;
+      grid-template-areas:"logo head dates chev" "pills pills pills pills";
+    }
+    .role > summary::-webkit-details-marker{display:none}
+    .role > summary:focus-visible{outline:2px solid var(--brand);outline-offset:-2px;border-radius:var(--radius)}
+    .role-logo{grid-area:logo;width:52px;height:52px;border-radius:12px;object-fit:cover;border:1px solid var(--border);background:#0c1826}
+    .role-head{grid-area:head;min-width:0;text-align:left}
+    .role-company{margin:0;font-size:1.05rem;font-weight:800;line-height:1.2;color:var(--text)}
+    .role-title{margin:.15rem 0 0;color:var(--brand-2);font-size:.92rem;font-weight:600;line-height:1.25}
+    .role-dates{grid-area:dates;color:var(--muted);font-size:.82rem;white-space:nowrap;font-family:"Fira Code",monospace}
+    .role-chev{grid-area:chev;color:var(--muted);font-size:1rem;transition:transform .25s var(--ease);justify-self:end}
+    .role[open] .role-chev{transform:rotate(180deg);color:var(--brand)}
+    .role-pills{grid-area:pills;display:flex;flex-wrap:wrap;gap:.3rem;margin:0}
+    .role-pills .pill{font-size:.72rem;padding:.22rem .55rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0))}
+    .role-body{padding:0 1.1rem 1.1rem;color:#d9e6ff;text-align:left}
+    .role-body p{margin:.4rem 0}
+    @media (max-width:640px){
+      .role > summary{
+        grid-template-columns:44px 1fr 20px;
+        grid-template-areas:"logo head chev" "dates dates dates" "pills pills pills";
+        gap:.6rem .8rem;padding:.9rem;
+      }
+      .role-logo{width:44px;height:44px}
+      .role-dates{justify-self:start;margin-top:-.1rem}
+      .role-company{font-size:1rem}
+      .role-title{font-size:.88rem}
+    }
+    /* Retire old exp-card chrome; keep nested .inner-exp which still uses details */
+    .exp-card{display:none}
+
+    /* Skills — filter pills + unified badge grid */
+    .skill-filter{
+      display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;
+      max-width:760px;margin:0 auto 1.25rem
+    }
+    .skill-filter button{
+      font-family:inherit;cursor:pointer;
+      padding:.4rem .85rem;border-radius:999px;
+      font-size:.8rem;font-weight:600;letter-spacing:.02em;
+      color:var(--muted);border:1px solid var(--border);
+      background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,0));
+      transition:color .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease), transform .15s var(--ease), box-shadow .18s var(--ease)
+    }
+    .skill-filter button:hover{color:var(--text);border-color:rgba(58,160,255,.4)}
+    .skill-filter button:active{transform:scale(.96)}
+    .skill-filter button[aria-pressed="true"]{
+      color:#0b1623;border-color:transparent;
+      background:linear-gradient(180deg,var(--brand-2),var(--brand));
+      box-shadow:0 6px 18px rgba(58,160,255,.28)
+    }
+    .skill-filter button:focus-visible{outline-offset:3px}
+
+    .skills-unified{
+      display:grid;gap:.6rem;
+      grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+    }
+    .skill-badge{
+      display:flex;align-items:center;gap:.6rem;min-height:48px;
+      padding:.55rem .7rem;border:1px solid var(--border);border-radius:12px;
+      color:var(--text);text-decoration:none;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
+      transition:transform .18s var(--ease), border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+    }
+    .skill-badge i,.skill-badge img{font-size:1.1rem;width:20px;height:20px;color:var(--brand-2);flex-shrink:0;transition:transform .2s var(--ease)}
+    .skill-badge span{font-size:.84rem;font-weight:500;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .skill-badge:hover{transform:translateY(-2px);border-color:rgba(58,160,255,.4);box-shadow:0 8px 22px rgba(58,160,255,.2);background:linear-gradient(180deg,rgba(58,160,255,.08),rgba(255,255,255,0))}
+    .skill-badge:hover i,.skill-badge:hover img{transform:scale(1.12)}
+    .skill-badge[hidden]{display:none !important}
+    @media (hover:none){
+      .skill-badge:hover{transform:none;box-shadow:none}
+    }
+    @media (max-width:480px){
+      .skills-unified{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.5rem}
+      .skill-badge{padding:.5rem .6rem;min-height:44px}
+      .skill-badge span{font-size:.78rem}
+      .skill-filter button{padding:.35rem .7rem;font-size:.75rem}
+    }
+
+    /* Retire the 5 duplicated old skills grids */
+    .skills-note{display:none}
+    .skill-section{display:none}
+
+    /* Connect — email chip alongside icons */
+    .contact-email{
+      display:inline-flex;align-items:center;gap:.5rem;
+      padding:.55rem 1rem;margin-bottom:1rem;
+      font-family:"Fira Code",monospace;font-size:.92rem;
+      color:var(--brand-2);text-decoration:none;
+      border:1px dashed rgba(58,160,255,.5);border-radius:999px;
+      background:linear-gradient(180deg,rgba(58,160,255,.06),rgba(255,255,255,0));
+      transition:color .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease)
+    }
+    .contact-email:hover{color:var(--text);border-style:solid;border-color:var(--brand);transform:translateY(-2px);box-shadow:0 10px 26px rgba(58,160,255,.22)}
+    .contact-email:active{transform:translateY(0)}
+    .contact-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+
+    /* Hero refinements — drop duplicate mobile portrait, tighten hierarchy */
+    .portrait-mobile{display:none !important}
+    .hero-photo{display:flex !important}
+    @media (max-width:999px){
+      .hero-grid{grid-template-columns:1fr;justify-items:center}
+      .hero-photo{order:0;margin-bottom:.4rem}
+      .hero-copy{order:1;text-align:center}
+      .hero-copy .cta-row{justify-content:center}
+      .portrait-wrap{width:min(220px,55%)}
+    }
+    @media (min-width:1000px){
+      .hero-photo{order:2}
+    }
+    .welcome{font-size:var(--fs-eyebrow);letter-spacing:.18em;text-transform:uppercase;color:var(--brand-2);opacity:.9}
+    .welcome::before{content:"// "}
+
+    /* Retire hamburger-drawer pattern (bottom nav replaces it on mobile) */
+    .hamburger,.mobile-drawer,.drawer-backdrop{display:none !important}
+    @media (max-width:980px){
+      nav[aria-label="Primary"]{display:none}
+    }
+
+    /* Fine-tune spacing between stacked sections now that eyebrow is inline */
+    .section{padding:clamp(54px,7vw,84px) 0}
+    /* Stronger dividers between sections to reinforce hierarchy */
+    section:not(#home):not(#about)::before{opacity:.75}
+
     /* Print */
     @media print{
       .site-header,.mobile-drawer,.drawer-backdrop,.fab,.progress,.noise,.scanline{display:none !important}
@@ -471,7 +660,6 @@
   <a class="skip-link" href="#home">Skip to content</a>
   <div class="noise" aria-hidden="true"></div>
   <div class="progress" id="progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
-  <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
 
   <!-- Header -->
   <header class="site-header page-enter delay-0" id="siteHeader">
@@ -490,16 +678,6 @@
         <a href="#contact" class="nav-link">Connect</a>
         <span class="nav-underline" id="navUnderline"></span>
       </nav>
-      <button id="hamburger" class="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
-    </div>
-    <div class="mobile-drawer" id="drawer" aria-hidden="true">
-      <a href="#home" class="drawer-link">Home</a>
-      <a href="#about" class="drawer-link">About</a>
-      <a href="#education" class="drawer-link">Education</a>
-      <a href="#experience" class="drawer-link">Experience</a>
-      <a href="#projects" class="drawer-link">Projects</a>
-      <a href="#skills" class="drawer-link">Skills</a>
-      <a href="#contact" class="drawer-link">Connect</a>
     </div>
   </header>
 
@@ -518,20 +696,11 @@
           </div>
         </div>
 
-        <!-- Text & Mobile portrait -->
+        <!-- Text -->
         <div class="hero-copy page-enter delay-2">
-          <p class="welcome page-enter delay-1">Welcome to my portfolio page!</p>
+          <p class="welcome page-enter delay-1">Welcome</p>
           <h1 class="glow-title page-enter delay-2">Jonathan Pedrero</h1>
           <p class="subtitle page-enter delay-3">Technology Operations Professional</p>
-
-          <!-- Mobile-only portrait between subtitle and rotating text -->
-          <div class="portrait-mobile" aria-hidden="true">
-            <div class="portrait-wrap" style="margin:10px auto 0;">
-              <img src="assets/JP2.PNG" alt="" decoding="async" loading="lazy" />
-              <div class="scanline"></div>
-            </div>
-          </div>
-
           <span class="rotator page-enter delay-4" id="rotator" aria-live="polite">Technology Enthusiast</span>
 
           <!-- Email Me -->
@@ -553,8 +722,11 @@
     <!-- About -->
     <section id="about" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <h2 class="section-title">About</h2>
-        <p class="section-subtitle">Read about this webpage and who I am.</p>
+        <div class="section-head">
+          <span class="eyebrow">Who I am</span>
+          <h2 class="section-title">About</h2>
+          <p class="section-subtitle">A bit about this site, my career, and what I get up to when I'm off the clock.</p>
+        </div>
         <div class="about-grid about-acc">
           <details class="card">
             <summary>
@@ -598,8 +770,11 @@
     <!-- Education -->
     <section id="education" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <h2 class="section-title">Education</h2>
-        <p class="section-subtitle">Academic degrees and professional certifications acquired.</p>
+        <div class="section-head">
+          <span class="eyebrow">Learning path</span>
+          <h2 class="section-title">Education</h2>
+          <p class="section-subtitle">Academic degrees and professional certifications.</p>
+        </div>
         <div class="edu-grid">
           <article class="card edu-card">
             <h3>College</h3>
@@ -682,27 +857,30 @@
     <!-- Experience -->
     <section id="experience" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <h2 class="section-title">Experience</h2>
-        <p class="section-subtitle">Work history and key accomplishments.</p>
+        <div class="section-head">
+          <span class="eyebrow">Where I've been</span>
+          <h2 class="section-title">Experience</h2>
+          <p class="section-subtitle">Roles, tenure, and the key accomplishments from each. Tap a card to expand.</p>
+        </div>
 
-        <div class="timeline">
+        <div class="roles timeline">
           <!-- CrowdStrike -->
-          <details class="exp-card">
+          <details class="role">
             <summary>
-              <img src="assets/logos/crowdstrike.png" class="company-logo" alt="CrowdStrike logo" loading="lazy" />
-              <div class="exp-head">
-                <h3>CrowdStrike</h3>
-                <div class="exp-title">Senior IT Systems Administrator</div>
-                <span class="exp-dates">Oct 2023 – Present</span>
+              <img src="assets/logos/crowdstrike.png" class="role-logo company-logo" alt="CrowdStrike logo" loading="lazy" />
+              <div class="role-head">
+                <h3 class="role-company">CrowdStrike</h3>
+                <div class="role-title">Senior IT Systems Administrator</div>
               </div>
-              <div class="x-tags">
+              <span class="role-dates">Oct 2023 — Present</span>
+              <i class="role-chev fa-solid fa-chevron-down" aria-hidden="true"></i>
+              <div class="role-pills">
                 <span class="pill">EDR</span><span class="pill">IAM</span><span class="pill">ITIL</span>
                 <span class="pill">Automation</span><span class="pill">Documentation</span>
               </div>
-              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
             </summary>
             <div class="collapsible">
-              <div class="exp-body">
+              <div class="role-body">
                 <p><strong>Summary:</strong> Senior administrator driving global IT operations and service reliability. I lead access automation at scale (2k+ monthly automated requests), improve problem/major-incident processes to cut MTTR, and standardize escalation and support workflows across identity lifecycle, endpoint health, and integrations.</p>
                 <div class="key-callout"><i class="fa-solid fa-key"></i>
                   <div>
@@ -720,22 +898,22 @@
           </details>
 
           <!-- Bionic -->
-          <details class="exp-card">
+          <details class="role">
             <summary>
-              <img src="assets/logos/bionic.png" class="company-logo" alt="Bionic logo" loading="lazy" />
-              <div class="exp-head">
-                <h3>Bionic</h3>
-                <div class="exp-title">IT Engineer</div>
-                <span class="exp-dates">May 2023 – Oct 2023</span>
+              <img src="assets/logos/bionic.png" class="role-logo company-logo" alt="Bionic logo" loading="lazy" />
+              <div class="role-head">
+                <h3 class="role-company">Bionic</h3>
+                <div class="role-title">IT Engineer</div>
               </div>
-              <div class="x-tags">
+              <span class="role-dates">May 2023 — Oct 2023</span>
+              <i class="role-chev fa-solid fa-chevron-down" aria-hidden="true"></i>
+              <div class="role-pills">
                 <span class="pill">MDM</span><span class="pill">IAM</span><span class="pill">Networking</span>
                 <span class="pill">ZTNA</span><span class="pill">Cloudflare</span>
               </div>
-              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
             </summary>
             <div class="collapsible">
-              <div class="exp-body">
+              <div class="role-body">
                 <p><strong>Summary:</strong> First AMER IT hire at an APSM startup (acquired by CrowdStrike) owning frontline support and secure-by-default operations. Implemented SSO/SCIM, standardized endpoint deployment/patching, and delivered ZTNA and network baselines with a strong automation focus.</p>
                 <div class="key-callout"><i class="fa-solid fa-key"></i>
                   <div>
@@ -753,31 +931,30 @@
           </details>
 
           <!-- Built Technologies -->
-          <details class="exp-card">
+          <details class="role">
             <summary>
-              <img src="assets/logos/built.png" class="company-logo" alt="Built Technologies logo" loading="lazy" />
-              <div class="exp-head">
-                <h3>Built Technologies</h3>
-                <div class="exp-title">IT Infrastructure Specialist & Desktop Support Technician II</div>
-                <span class="exp-dates">Dec 2021 – May 2023</span>
+              <img src="assets/logos/built.png" class="role-logo company-logo" alt="Built Technologies logo" loading="lazy" />
+              <div class="role-head">
+                <h3 class="role-company">Built Technologies</h3>
+                <div class="role-title">IT Infrastructure Specialist & Desktop Support Technician II</div>
               </div>
-              <div class="x-tags">
+              <span class="role-dates">Dec 2021 — May 2023</span>
+              <i class="role-chev fa-solid fa-chevron-down" aria-hidden="true"></i>
+              <div class="role-pills">
                 <span class="pill">MDM</span><span class="pill">IdP</span><span class="pill">Networking</span>
                 <span class="pill">Intune</span><span class="pill">Governance</span>
               </div>
-              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
             </summary>
             <div class="collapsible">
-              <div class="exp-body">
+              <div class="role-body">
                 <p><strong>Summary:</strong> Progressed from advanced support to infrastructure administration in a hybrid environment. Led Windows fleet migration to Intune, matured identity and Google Workspace governance, and improved zero-touch deployment and OOBE for macOS/Windows—driving compliance and reliable onboarding/offboarding at scale.</p>
 
-                <!-- No spacing block per request -->
-                <h4 style="margin:0">IT Infrastructure Specialist</h4>
-                <div class="exp-dates" style="margin:0">Nov 2022 – May 2023</div>
+                <h4 style="margin:.8rem 0 0">IT Infrastructure Specialist</h4>
+                <div class="exp-dates" style="margin:0;font-family:'Fira Code',monospace;font-size:.82rem;color:var(--muted)">Nov 2022 — May 2023</div>
                 <p style="margin:.2rem 0 0">Managed JumpCloud & Kandji, zero-touch deployment, and identity/access for core apps (Google Workspace, Slack, Zoom, Atlassian, Malwarebytes, Tenable, Automox, 1Password, Perimeter 81).</p>
 
                 <h4 style="margin:.8rem 0 0">Desktop Support Technician II</h4>
-                <div class="exp-dates" style="margin:0">Dec 2021 – Nov 2022</div>
+                <div class="exp-dates" style="margin:0;font-family:'Fira Code',monospace;font-size:.82rem;color:var(--muted)">Dec 2021 — Nov 2022</div>
                 <p style="margin:.2rem 0 0">Delivered distributed support and device/software lifecycle. Operated Jira Service Management/Confluence; handled procurement, imaging, deployment, and shipping. Supported security teams with alert triage and endpoint policy enforcement.</p>
 
                 <div class="key-callout"><i class="fa-solid fa-key"></i>
@@ -795,23 +972,23 @@
           </details>
 
           <!-- Earlier Career -->
-          <details class="exp-card">
+          <details class="role">
             <summary>
-              <img src="assets/logos/early.png" class="company-logo" alt="Earlier career logo" loading="lazy" />
-              <div class="exp-head">
-                <h3>Earlier Career · IT Support</h3>
-                <div class="exp-title">Contract / Part-time / Internship</div>
-                <span class="exp-dates">May 2019 – Dec 2021</span>
+              <img src="assets/logos/early.png" class="role-logo company-logo" alt="Earlier career logo" loading="lazy" />
+              <div class="role-head">
+                <h3 class="role-company">Earlier Career · IT Support</h3>
+                <div class="role-title">Contract · Part-time · Internship</div>
               </div>
-              <div class="x-tags"><span class="pill">Support</span><span class="pill">Onboarding</span></div>
-              <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
+              <span class="role-dates">May 2019 — Dec 2021</span>
+              <i class="role-chev fa-solid fa-chevron-down" aria-hidden="true"></i>
+              <div class="role-pills"><span class="pill">Support</span><span class="pill">Onboarding</span></div>
             </summary>
             <div class="collapsible">
-              <div class="exp-body">
+              <div class="role-body">
                 <details class="inner-exp">
                   <summary>
                     <div><strong>CereCore</strong><div class="exp-title">IT Service Desk Analyst (Contract)</div></div>
-                    <span class="exp-dates">May 2021 – Dec 2021</span>
+                    <span class="exp-dates">May 2021 — Dec 2021</span>
                     <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
                   </summary>
                   <div class="collapsible">
@@ -824,7 +1001,7 @@
                 <details class="inner-exp">
                   <summary>
                     <div><strong>Kentucky Tennessee Conference</strong><div class="exp-title">IT Assistant (Part-time)</div></div>
-                    <span class="exp-dates">Oct 2019 – Dec 2020</span>
+                    <span class="exp-dates">Oct 2019 — Dec 2020</span>
                     <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
                   </summary>
                   <div class="collapsible">
@@ -836,7 +1013,7 @@
                 <details class="inner-exp">
                   <summary>
                     <div><strong>Enable Resource Group</strong><div class="exp-title">IT Field Engineer (Intern)</div></div>
-                    <span class="exp-dates">May 2019 – Aug 2019</span>
+                    <span class="exp-dates">May 2019 — Aug 2019</span>
                     <span class="summary-affordance" aria-hidden="true"><span class="chev">▾</span></span>
                   </summary>
                   <div class="collapsible">
@@ -855,8 +1032,11 @@
     <!-- Projects -->
     <section id="projects" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <h2 class="section-title">Projects</h2>
-        <p class="section-subtitle">Major projects led or completed in my professional career. Metric outcome updates coming in a later page update.</p>
+        <div class="section-head">
+          <span class="eyebrow">What I've shipped</span>
+          <h2 class="section-title">Projects</h2>
+          <p class="section-subtitle">Major programs I've led or delivered. Outcome metrics coming in a later update.</p>
+        </div>
         <div class="projects-grid">
           <article class="project-card">
             <h3>Simple Access Request Automation (SARA)</h3>
@@ -915,65 +1095,58 @@
     <!-- Skills & Applications -->
     <section id="skills" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <h2 class="section-title">Skills & Applications</h2>
-        <p class="skills-note">Technical service administrator and / or power user of listed applications.</p>
-
-        <div class="skill-section">
-          <h3>EDR / Security Operations</h3>
-          <div class="skills-grid">
-            <a class="skill-card" href="https://www.crowdstrike.com/" target="_blank" rel="noopener" aria-label="CrowdStrike Falcon"><i class="fa-solid fa-shield-halved"></i><span>CrowdStrike Falcon</span></a>
-            <a class="skill-card" href="https://www.tenable.com/" target="_blank" rel="noopener" aria-label="Tenable"><i class="fa-solid fa-bugs"></i><span>Tenable</span></a>
-            <a class="skill-card" href="https://www.malwarebytes.com/" target="_blank" rel="noopener" aria-label="Malwarebytes"><i class="fa-solid fa-virus-covid"></i><span>Malwarebytes</span></a>
-            <a class="skill-card" href="https://www.automox.com/" target="_blank" rel="noopener" aria-label="Automox"><i class="fa-solid fa-shield"></i><span>Automox</span></a>
-          </div>
+        <div class="section-head">
+          <span class="eyebrow">What I use</span>
+          <h2 class="section-title">Skills &amp; Applications</h2>
+          <p class="section-subtitle">Technical service administrator and/or power user of the tools below. Filter by category.</p>
         </div>
 
-        <div class="skill-section">
-          <h3>MDM / Device Management</h3>
-          <div class="skills-grid">
-            <a class="skill-card" href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener" aria-label="Microsoft Intune"><i class="fa-solid fa-tablet-screen-button"></i><span>Microsoft Intune</span></a>
-            <a class="skill-card" href="https://jumpcloud.com/" target="_blank" rel="noopener" aria-label="JumpCloud"><i class="fa-solid fa-id-card-clip"></i><span>JumpCloud</span></a>
-            <a class="skill-card" href="https://www.kandji.io/" target="_blank" rel="noopener" aria-label="Kandji"><i class="fa-solid fa-mobile-screen"></i><span>Kandji</span></a>
-            <a class="skill-card" href="https://www.jamf.com/products/jamf-pro/" target="_blank" rel="noopener" aria-label="Jamf Pro"><i class="fa-brands fa-apple"></i><span>Jamf Pro</span></a>
-            <a class="skill-card" href="https://support.apple.com/apple-configurator" target="_blank" rel="noopener" aria-label="Apple Configurator"><i class="fa-solid fa-screwdriver-wrench"></i><span>Apple Configurator</span></a>
-            <a class="skill-card" href="https://www.vmware.com/products/workspace-one.html" target="_blank" rel="noopener" aria-label="AirWatch / Workspace ONE"><i class="fa-solid fa-mobile"></i><span>AirWatch / WS1</span></a>
-            <!-- Moved here -->
-            <a class="skill-card" href="https://learn.microsoft.com/mem/configmgr/" target="_blank" rel="noopener" aria-label="SCCM"><i class="fa-solid fa-server"></i><span>SCCM</span></a>
-          </div>
+        <div class="skill-filter" id="skillFilter" role="toolbar" aria-label="Filter skills by category">
+          <button type="button" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" data-filter="security" aria-pressed="false">Security</button>
+          <button type="button" data-filter="mdm" aria-pressed="false">MDM</button>
+          <button type="button" data-filter="iam" aria-pressed="false">IAM</button>
+          <button type="button" data-filter="networking" aria-pressed="false">Networking</button>
+          <button type="button" data-filter="cloud" aria-pressed="false">Cloud</button>
         </div>
 
-        <div class="skill-section">
-          <h3>IAM / Identity</h3>
-          <div class="skills-grid">
-            <a class="skill-card" href="https://azure.microsoft.com/products/active-directory/" target="_blank" rel="noopener" aria-label="Azure AD / Entra"><i class="fa-solid fa-user-lock"></i><span>Azure AD / Entra</span></a>
-            <a class="skill-card" href="https://www.okta.com/" target="_blank" rel="noopener" aria-label="Okta"><i class="fa-solid fa-user-lock"></i><span>Okta</span></a>
-            <a class="skill-card" href="https://www.perimeter81.com/" target="_blank" rel="noopener" aria-label="Perimeter 81"><i class="fa-solid fa-route"></i><span>Perimeter 81</span></a>
-            <a class="skill-card" href="https://ldap.com/" target="_blank" rel="noopener" aria-label="LDAP / RADIUS"><i class="fa-solid fa-user-lock"></i><span>LDAP / RADIUS</span></a>
-            <a class="skill-card" href="https://oauth.net/" target="_blank" rel="noopener" aria-label="SAML / OAuth / OIDC"><i class="fa-solid fa-fingerprint"></i><span>SAML / OAuth / OIDC</span></a>
-          </div>
-        </div>
+        <div class="skills-unified" id="skillsGrid">
+          <!-- Security -->
+          <a class="skill-badge" data-cat="security" href="https://www.crowdstrike.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield-halved"></i><span>CrowdStrike Falcon</span></a>
+          <a class="skill-badge" data-cat="security" href="https://www.tenable.com/" target="_blank" rel="noopener"><i class="fa-solid fa-bugs"></i><span>Tenable</span></a>
+          <a class="skill-badge" data-cat="security" href="https://www.malwarebytes.com/" target="_blank" rel="noopener"><i class="fa-solid fa-virus-covid"></i><span>Malwarebytes</span></a>
+          <a class="skill-badge" data-cat="security" href="https://www.automox.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield"></i><span>Automox</span></a>
 
-        <div class="skill-section">
-          <h3>NaaS / Networking</h3>
-          <div class="skills-grid">
-            <a class="skill-card" href="https://ui.com/" target="_blank" rel="noopener" aria-label="Ubiquiti"><i class="fa-solid fa-network-wired"></i><span>Ubiquiti</span></a>
-            <a class="skill-card" href="https://meraki.cisco.com/" target="_blank" rel="noopener" aria-label="Meraki"><i class="fa-solid fa-network-wired"></i><span>Meraki</span></a>
-          </div>
-        </div>
+          <!-- MDM -->
+          <a class="skill-badge" data-cat="mdm" href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener"><i class="fa-solid fa-tablet-screen-button"></i><span>Microsoft Intune</span></a>
+          <a class="skill-badge" data-cat="mdm" href="https://jumpcloud.com/" target="_blank" rel="noopener"><i class="fa-solid fa-id-card-clip"></i><span>JumpCloud</span></a>
+          <a class="skill-badge" data-cat="mdm" href="https://www.kandji.io/" target="_blank" rel="noopener"><i class="fa-solid fa-mobile-screen"></i><span>Kandji</span></a>
+          <a class="skill-badge" data-cat="mdm" href="https://www.jamf.com/products/jamf-pro/" target="_blank" rel="noopener"><i class="fa-brands fa-apple"></i><span>Jamf Pro</span></a>
+          <a class="skill-badge" data-cat="mdm" href="https://support.apple.com/apple-configurator" target="_blank" rel="noopener"><i class="fa-solid fa-screwdriver-wrench"></i><span>Apple Configurator</span></a>
+          <a class="skill-badge" data-cat="mdm" href="https://www.vmware.com/products/workspace-one.html" target="_blank" rel="noopener"><i class="fa-solid fa-mobile"></i><span>AirWatch / WS1</span></a>
+          <a class="skill-badge" data-cat="mdm" href="https://learn.microsoft.com/mem/configmgr/" target="_blank" rel="noopener"><i class="fa-solid fa-server"></i><span>SCCM</span></a>
 
-        <div class="skill-section">
-          <h3>Cloud / Collaboration</h3>
-          <div class="skills-grid">
-            <a class="skill-card" href="https://aws.amazon.com/" target="_blank" rel="noopener" aria-label="AWS"><i class="fa-solid fa-cloud"></i><span>AWS</span></a>
-            <a class="skill-card" href="https://workspace.google.com/" target="_blank" rel="noopener" aria-label="Google Workspace"><i class="devicon-google-plain"></i><span>Google Workspace</span></a>
-            <a class="skill-card" href="https://slack.com/" target="_blank" rel="noopener" aria-label="Slack"><i class="devicon-slack-plain"></i><span>Slack</span></a>
-            <a class="skill-card" href="https://www.atlassian.com/" target="_blank" rel="noopener" aria-label="Atlassian"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
-            <a class="skill-card" href="https://sendgrid.com/" target="_blank" rel="noopener" aria-label="SendGrid"><i class="fa-regular fa-paper-plane"></i><span>SendGrid</span></a>
-            <a class="skill-card" href="https://1password.com/" target="_blank" rel="noopener" aria-label="1Password"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
-            <a class="skill-card" href="https://www.servicenow.com/" target="_blank" rel="noopener" aria-label="ServiceNow"><i class="fa-solid fa-ticket"></i><span>ServiceNow</span></a>
-            <a class="skill-card" href="https://www.microsoft.com/microsoft-365" target="_blank" rel="noopener" aria-label="Microsoft 365"><i class="fa-brands fa-microsoft"></i><span>Microsoft 365</span></a>
-            <a class="skill-card" href="https://learn.microsoft.com/exchange/" target="_blank" rel="noopener" aria-label="Exchange"><i class="fa-solid fa-envelopes-bulk"></i><span>Exchange</span></a>
-          </div>
+          <!-- IAM -->
+          <a class="skill-badge" data-cat="iam" href="https://azure.microsoft.com/products/active-directory/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>Azure AD / Entra</span></a>
+          <a class="skill-badge" data-cat="iam" href="https://www.okta.com/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>Okta</span></a>
+          <a class="skill-badge" data-cat="iam" href="https://www.perimeter81.com/" target="_blank" rel="noopener"><i class="fa-solid fa-route"></i><span>Perimeter 81</span></a>
+          <a class="skill-badge" data-cat="iam" href="https://ldap.com/" target="_blank" rel="noopener"><i class="fa-solid fa-user-lock"></i><span>LDAP / RADIUS</span></a>
+          <a class="skill-badge" data-cat="iam" href="https://oauth.net/" target="_blank" rel="noopener"><i class="fa-solid fa-fingerprint"></i><span>SAML / OAuth / OIDC</span></a>
+
+          <!-- Networking -->
+          <a class="skill-badge" data-cat="networking" href="https://ui.com/" target="_blank" rel="noopener"><i class="fa-solid fa-network-wired"></i><span>Ubiquiti</span></a>
+          <a class="skill-badge" data-cat="networking" href="https://meraki.cisco.com/" target="_blank" rel="noopener"><i class="fa-solid fa-network-wired"></i><span>Meraki</span></a>
+
+          <!-- Cloud / Collaboration -->
+          <a class="skill-badge" data-cat="cloud" href="https://aws.amazon.com/" target="_blank" rel="noopener"><i class="fa-solid fa-cloud"></i><span>AWS</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://workspace.google.com/" target="_blank" rel="noopener"><i class="devicon-google-plain"></i><span>Google Workspace</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://slack.com/" target="_blank" rel="noopener"><i class="devicon-slack-plain"></i><span>Slack</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://www.atlassian.com/" target="_blank" rel="noopener"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://sendgrid.com/" target="_blank" rel="noopener"><i class="fa-regular fa-paper-plane"></i><span>SendGrid</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://1password.com/" target="_blank" rel="noopener"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://www.servicenow.com/" target="_blank" rel="noopener"><i class="fa-solid fa-ticket"></i><span>ServiceNow</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://www.microsoft.com/microsoft-365" target="_blank" rel="noopener"><i class="fa-brands fa-microsoft"></i><span>Microsoft 365</span></a>
+          <a class="skill-badge" data-cat="cloud" href="https://learn.microsoft.com/exchange/" target="_blank" rel="noopener"><i class="fa-solid fa-envelopes-bulk"></i><span>Exchange</span></a>
         </div>
       </div>
     </section>
@@ -981,12 +1154,20 @@
     <!-- Connect -->
     <section id="contact" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <h2 class="section-title">Connect</h2>
-        <div class="cta-row" style="justify-content:center;">
-          <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
-          <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
-          <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-          <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <div class="section-head" style="text-align:center">
+          <span class="eyebrow">Say hello</span>
+          <h2 class="section-title">Connect</h2>
+          <p class="section-subtitle" style="text-align:center;max-width:none">Happy to chat tech, ops, or ballpark rankings.</p>
+        </div>
+        <div class="contact-wrap">
+          <a class="contact-email" href="mailto:jp3drero@gmail.com" aria-label="Email jp3drero@gmail.com">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>jp3drero@gmail.com
+          </a>
+          <div class="cta-row" style="justify-content:center;">
+            <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          </div>
         </div>
       </div>
     </section>
@@ -999,6 +1180,17 @@
       <small class="last-updated">Last updated: April 2026</small>
     </div>
   </footer>
+
+  <!-- Mobile bottom tab bar -->
+  <nav class="bottom-nav" id="bottomNav" aria-label="Primary (mobile)">
+    <div class="bottom-nav-inner">
+      <a href="#home" class="bnav-link" data-section="home"><i class="fa-solid fa-house" aria-hidden="true"></i><span>Home</span></a>
+      <a href="#about" class="bnav-link" data-section="about"><i class="fa-regular fa-id-badge" aria-hidden="true"></i><span>About</span></a>
+      <a href="#experience" class="bnav-link" data-section="experience"><i class="fa-solid fa-briefcase" aria-hidden="true"></i><span>Work</span></a>
+      <a href="#skills" class="bnav-link" data-section="skills"><i class="fa-solid fa-toolbox" aria-hidden="true"></i><span>Skills</span></a>
+      <a href="#contact" class="bnav-link" data-section="contact"><i class="fa-regular fa-paper-plane" aria-hidden="true"></i><span>Connect</span></a>
+    </div>
+  </nav>
 
   <script>
     (() => {
@@ -1057,36 +1249,40 @@
         window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       });
 
-      // ------- Hamburger + drawer (ESC, outside-click, scroll-lock) -------
-      const burger = document.getElementById('hamburger');
-      const drawer = document.getElementById('drawer');
-      const backdrop = document.getElementById('drawerBackdrop');
-      const toggleDrawer = (open) => {
-        drawer.setAttribute('aria-hidden', String(!open));
-        burger.setAttribute('aria-expanded', String(open));
-        drawer.classList.toggle('open', open);
-        burger.classList.toggle('open', open);
-        backdrop.classList.toggle('show', open);
-        document.body.classList.toggle('drawer-locked', open);
-        if (open) {
-          const first = drawer.querySelector('a');
-          if (first) first.focus({ preventScroll: true });
-        }
-      };
-      burger.addEventListener('click', () => toggleDrawer(!drawer.classList.contains('open')));
-      drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => toggleDrawer(false)));
-      backdrop.addEventListener('click', () => toggleDrawer(false));
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && drawer.classList.contains('open')) {
-          toggleDrawer(false);
-          burger.focus({ preventScroll: true });
-        }
+      // ------- Skills filter -------
+      const filterBar = document.getElementById('skillFilter');
+      const grid = document.getElementById('skillsGrid');
+      if (filterBar && grid) {
+        const badges = Array.from(grid.querySelectorAll('.skill-badge'));
+        const apply = (cat) => {
+          badges.forEach(b => {
+            const match = cat === 'all' || b.dataset.cat === cat;
+            if (match) b.removeAttribute('hidden');
+            else b.setAttribute('hidden', '');
+          });
+        };
+        filterBar.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-filter]');
+          if (!btn) return;
+          filterBar.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', 'false'));
+          btn.setAttribute('aria-pressed', 'true');
+          apply(btn.dataset.filter);
+        });
+      }
+
+      // ------- Bottom-nav active state mirrors section-in-view -------
+      const bnavMap = {};
+      document.querySelectorAll('.bnav-link').forEach(a => {
+        const id = a.dataset.section;
+        if (id) bnavMap[id] = a;
       });
-      // Close drawer if resized to desktop
-      const mqDesktop = window.matchMedia('(min-width: 981px)');
-      const handleDesktopChange = () => { if (mqDesktop.matches) toggleDrawer(false); };
-      if (mqDesktop.addEventListener) mqDesktop.addEventListener('change', handleDesktopChange);
-      else if (mqDesktop.addListener) mqDesktop.addListener(handleDesktopChange);
+      const setBnavActive = (id) => {
+        // Group neighboring sections under the closest tab so the bar always highlights something sensible.
+        const groupMap = { home:'home', about:'about', education:'about', experience:'experience', projects:'experience', skills:'skills', contact:'contact' };
+        const target = groupMap[id] || id;
+        Object.values(bnavMap).forEach(l => l.classList.remove('active'));
+        if (bnavMap[target]) bnavMap[target].classList.add('active');
+      };
 
       // ------- Scroll-reveal on sections -------
       const revealObs = new IntersectionObserver(entries => {
@@ -1150,6 +1346,7 @@
         entries.forEach(e => {
           if (e.isIntersecting) {
             const id = e.target.id;
+            setBnavActive(id);
             if (navMap[id]) {
               Object.values(navMap).forEach(n => n.classList.remove('active'));
               navMap[id].classList.add('active');
