@@ -474,10 +474,14 @@
     }
     .eyebrow::before{content:"// "}
     .section-head .section-title{font-size:var(--fs-title);margin:0;letter-spacing:.2px;line-height:1.15}
-    .section-head .section-subtitle{margin:.5rem 0 0;color:var(--muted);font-size:var(--fs-section-sub);text-align:center}
+    .section-head .section-subtitle{margin:.5rem 0 0;color:var(--muted);font-size:var(--fs-section-sub)}
+    /* Title + subtitle must track the section-head's alignment (center on mobile, left on desktop)
+       so the eyebrow "// " prefix and the H2 line up correctly. */
+    .section-head .section-title,
+    .section-head .section-subtitle{text-align:inherit}
     @media (min-width:860px){
       .section-head{text-align:left}
-      .section-head .section-subtitle{text-align:left;max-width:640px}
+      .section-head .section-subtitle{max-width:640px}
     }
 
     /* Bottom tab bar (mobile primary nav) */
@@ -603,20 +607,6 @@
     .skills-note{display:none}
     .skill-section{display:none}
 
-    /* Connect — email chip alongside icons */
-    .contact-email{
-      display:inline-flex;align-items:center;gap:.5rem;
-      padding:.55rem 1rem;margin-bottom:1rem;
-      font-family:"Fira Code",monospace;font-size:.92rem;
-      color:var(--brand-2);text-decoration:none;
-      border:1px dashed rgba(58,160,255,.5);border-radius:999px;
-      background:linear-gradient(180deg,rgba(58,160,255,.06),rgba(255,255,255,0));
-      transition:color .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease)
-    }
-    .contact-email:hover{color:var(--text);border-style:solid;border-color:var(--brand);transform:translateY(-2px);box-shadow:0 10px 26px rgba(58,160,255,.22)}
-    .contact-email:active{transform:translateY(0)}
-    .contact-wrap{display:flex;flex-direction:column;align-items:center;gap:.2rem}
-
     /* Hero refinements — drop duplicate mobile portrait, tighten hierarchy */
     .portrait-mobile{display:none !important}
     .hero-photo{display:flex !important}
@@ -703,16 +693,12 @@
           <p class="subtitle page-enter delay-3">Technology Operations Professional</p>
           <span class="rotator page-enter delay-4" id="rotator" aria-live="polite">Technology Enthusiast</span>
 
-          <!-- Email Me -->
-          <a class="btn page-enter delay-5" href="mailto:jp3drero@gmail.com" aria-label="Email Jonathan Pedrero">
-            <i class="fa-solid fa-envelope"></i> Email Me
-          </a>
-
-          <!-- Social icons -->
+          <!-- Social icons (email first) -->
           <div class="cta-row page-enter delay-5">
-            <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
-            <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-            <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
+            <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
+            <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+            <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
           </div>
         </div>
       </div>
@@ -1107,7 +1093,7 @@
           <button type="button" data-filter="mdm" aria-pressed="false">MDM</button>
           <button type="button" data-filter="iam" aria-pressed="false">IAM</button>
           <button type="button" data-filter="networking" aria-pressed="false">Networking</button>
-          <button type="button" data-filter="cloud" aria-pressed="false">Cloud</button>
+          <button type="button" data-filter="cloud" aria-pressed="false">Cloud Collaboration</button>
         </div>
 
         <div class="skills-unified" id="skillsGrid">
@@ -1116,6 +1102,7 @@
           <a class="skill-badge" data-cat="security" href="https://www.tenable.com/" target="_blank" rel="noopener"><i class="fa-solid fa-bugs"></i><span>Tenable</span></a>
           <a class="skill-badge" data-cat="security" href="https://www.malwarebytes.com/" target="_blank" rel="noopener"><i class="fa-solid fa-virus-covid"></i><span>Malwarebytes</span></a>
           <a class="skill-badge" data-cat="security" href="https://www.automox.com/" target="_blank" rel="noopener"><i class="fa-solid fa-shield"></i><span>Automox</span></a>
+          <a class="skill-badge" data-cat="security" href="https://1password.com/" target="_blank" rel="noopener"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
 
           <!-- MDM -->
           <a class="skill-badge" data-cat="mdm" href="https://learn.microsoft.com/mem/intune/" target="_blank" rel="noopener"><i class="fa-solid fa-tablet-screen-button"></i><span>Microsoft Intune</span></a>
@@ -1143,7 +1130,6 @@
           <a class="skill-badge" data-cat="cloud" href="https://slack.com/" target="_blank" rel="noopener"><i class="devicon-slack-plain"></i><span>Slack</span></a>
           <a class="skill-badge" data-cat="cloud" href="https://www.atlassian.com/" target="_blank" rel="noopener"><i class="devicon-jira-plain"></i><span>Atlassian</span></a>
           <a class="skill-badge" data-cat="cloud" href="https://sendgrid.com/" target="_blank" rel="noopener"><i class="fa-regular fa-paper-plane"></i><span>SendGrid</span></a>
-          <a class="skill-badge" data-cat="cloud" href="https://1password.com/" target="_blank" rel="noopener"><i class="fa-solid fa-lock"></i><span>1Password</span></a>
           <a class="skill-badge" data-cat="cloud" href="https://www.servicenow.com/" target="_blank" rel="noopener"><i class="fa-solid fa-ticket"></i><span>ServiceNow</span></a>
           <a class="skill-badge" data-cat="cloud" href="https://www.microsoft.com/microsoft-365" target="_blank" rel="noopener"><i class="fa-brands fa-microsoft"></i><span>Microsoft 365</span></a>
           <a class="skill-badge" data-cat="cloud" href="https://learn.microsoft.com/exchange/" target="_blank" rel="noopener"><i class="fa-solid fa-envelopes-bulk"></i><span>Exchange</span></a>
@@ -1159,15 +1145,11 @@
           <h2 class="section-title">Connect</h2>
           <p class="section-subtitle" style="text-align:center;max-width:none">Happy to chat tech, ops, or ballpark rankings.</p>
         </div>
-        <div class="contact-wrap">
-          <a class="contact-email" href="mailto:jp3drero@gmail.com" aria-label="Email jp3drero@gmail.com">
-            <i class="fa-solid fa-envelope" aria-hidden="true"></i>jp3drero@gmail.com
-          </a>
-          <div class="cta-row" style="justify-content:center;">
-            <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
-            <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-            <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-          </div>
+        <div class="cta-row" style="justify-content:center;">
+          <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
+          <a class="icon-link" href="https://github.com/jlp3d" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub"><i class="fa-brands fa-github"></i></a>
+          <a class="icon-link" href="https://www.linkedin.com/in/jonathan-pedrero/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+          <a class="icon-link" href="https://www.instagram.com/jp3drero/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
         </div>
       </div>
     </section>
