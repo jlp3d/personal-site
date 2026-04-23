@@ -465,7 +465,7 @@
        These rules intentionally override earlier patterns where overlap exists.
        ====================================================================== */
 
-    /* Section heading pattern (eyebrow + title + subtitle) */
+    /* Section heading pattern (eyebrow + title + subtitle) — centered on all viewports */
     .section-head{max-width:var(--content-max);margin:0 auto 1.6rem;text-align:center}
     .eyebrow{
       display:inline-block;font-size:var(--fs-eyebrow);letter-spacing:.18em;
@@ -474,15 +474,10 @@
     }
     .eyebrow::before{content:"// "}
     .section-head .section-title{font-size:var(--fs-title);margin:0;letter-spacing:.2px;line-height:1.15}
-    .section-head .section-subtitle{margin:.5rem 0 0;color:var(--muted);font-size:var(--fs-section-sub)}
-    /* Title + subtitle must track the section-head's alignment (center on mobile, left on desktop)
-       so the eyebrow "// " prefix and the H2 line up correctly. */
+    .section-head .section-subtitle{margin:.5rem auto 0;color:var(--muted);font-size:var(--fs-section-sub);max-width:720px}
+    /* Title + subtitle inherit text-align from .section-head so any override (e.g. inline style) propagates. */
     .section-head .section-title,
     .section-head .section-subtitle{text-align:inherit}
-    @media (min-width:860px){
-      .section-head{text-align:left}
-      .section-head .section-subtitle{max-width:640px}
-    }
 
     /* Bottom tab bar (mobile primary nav) */
     .bottom-nav{
@@ -1140,10 +1135,10 @@
     <!-- Connect -->
     <section id="contact" class="section section-reveal page-enter delay-1">
       <div class="container">
-        <div class="section-head" style="text-align:center">
+        <div class="section-head">
           <span class="eyebrow">Say hello</span>
           <h2 class="section-title">Connect</h2>
-          <p class="section-subtitle" style="text-align:center;max-width:none">Happy to chat tech, ops, or ballpark rankings.</p>
+          <p class="section-subtitle">Happy to chat tech, ops, or ballpark rankings.</p>
         </div>
         <div class="cta-row" style="justify-content:center;">
           <a class="icon-link" href="mailto:jp3drero@gmail.com" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
