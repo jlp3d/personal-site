@@ -13,8 +13,15 @@
   <meta property="og:description" content="Tech-themed portfolio: experience, projects, and tools. Built with HTML, CSS, JS, and GitHub Pages." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/og.png" />
-  <link rel="icon" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon.png" />
+  <link rel="shortcut icon" href="assets/favicon.png" />
   <link rel="apple-touch-icon" href="assets/favicon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png" />
+  <meta name="msapplication-TileImage" content="assets/favicon.png" />
+  <meta name="msapplication-TileColor" content="#0b0f14" />
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -124,7 +131,7 @@
     }
     .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.7rem 0;min-height:var(--header-h)}
     .brand{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--text)}
-    .brand-avatar{width:40px;height:40px;object-fit:cover;border-radius:50%;border:1px solid var(--border);box-shadow:var(--shadow)}
+    .brand-avatar{width:40px;height:40px;object-fit:contain;border-radius:10px;background:transparent}
     .brand-text{font-weight:800;letter-spacing:.2px;opacity:.9;transition:opacity .25s var(--ease)}
     nav[aria-label="Primary"]{position:relative;display:flex;gap:.25rem;flex-wrap:nowrap}
     .nav-link{position:relative;color:var(--muted);text-decoration:none;padding:.45rem .65rem;border-radius:10px;white-space:nowrap;transition:transform .2s var(--ease),color .2s var(--ease),background .2s var(--ease)}
@@ -650,8 +657,7 @@
   <header class="site-header page-enter delay-0" id="siteHeader">
     <div class="container nav-wrap">
       <a href="#home" class="brand" aria-label="Jonathan Pedrero — back to top">
-        <img src="assets/JP.PNG" alt="" class="brand-avatar" width="40" height="40" decoding="async" />
-        <span class="brand-text" id="brandText">JP</span>
+        <img src="assets/favicon.png" alt="" class="brand-avatar" width="40" height="40" decoding="async" />
       </a>
       <nav class="nav" id="nav" aria-label="Primary">
         <a href="#home" class="nav-link">Home</a>
@@ -1305,7 +1311,6 @@
       const navMap = {};
       document.querySelectorAll('.nav a.nav-link').forEach(a => navMap[a.getAttribute('href').replace('#', '')] = a);
       const underline = document.getElementById('navUnderline');
-      const brandText = document.getElementById('brandText');
 
       function moveUnderline(el) {
         if (!el || !underline) return;
@@ -1330,7 +1335,6 @@
               Object.values(navMap).forEach(n => n.classList.remove('active'));
               navMap[id].classList.add('active');
               moveUnderline(navMap[id]);
-              if (brandText) brandText.textContent = (id === 'home') ? 'JP' : 'Jonathan Pedrero';
             }
           }
         });
