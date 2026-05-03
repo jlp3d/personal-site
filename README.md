@@ -8,7 +8,7 @@ This is my personal portfolio website — a clean, animated showcase of my **car
 
 ## 🚀 Features
 
-- **Modern Single-Page Layout** built with HTML, CSS, and JavaScript  
+- **Modern Single-Page Layout** built with HTML, CSS, and JavaScript (with help from Claude Code)  
 - **Smooth Animations** and fade-ins for section transitions  
 - **Responsive Design** for desktop and mobile  
 - **Dark Mode Default** with glowing accent effects  
@@ -22,6 +22,7 @@ This is my personal portfolio website — a clean, animated showcase of my **car
 ## 🧰 Tech Stack
 
 - **HTML5 / CSS3 / JavaScript**
+- **Claude Code** as an AI pair-programmer
 - **Font Awesome** icons
 - **Google Fonts:** Inter & Fira Code
 - **GitHub Pages** for free hosting
